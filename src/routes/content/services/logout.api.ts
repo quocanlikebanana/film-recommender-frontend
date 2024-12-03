@@ -5,7 +5,7 @@ const logoutApi = protectedApi.injectEndpoints({
         logout: builder.mutation<void, void>({
             query: () => ({
                 url: 'auth/logout',
-                method: 'GET',
+                method: 'POST',
             })
         }),
     }),
@@ -13,3 +13,4 @@ const logoutApi = protectedApi.injectEndpoints({
 });
 
 export default logoutApi;
+export const { useLogoutMutation } = logoutApi;

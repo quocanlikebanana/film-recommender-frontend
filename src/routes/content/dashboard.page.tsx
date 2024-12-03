@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
 	Box,
 	Grid2 as Grid,
@@ -16,12 +15,12 @@ import {
 	Recommend as RecommendIcon
 } from '@mui/icons-material';
 
-// Sample movie data (you would replace this with actual API data)
+
 const sampleRecommendations = [
 	{
 		id: 1,
 		title: 'Inception',
-		poster: '/api/placeholder/200/300',
+		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXWnBnPN47nWvqWJAxw-vmchKc_2u1zkG6Bw&s',
 		rating: 8.8,
 		genres: ['Sci-Fi', 'Action', 'Thriller'],
 		description: 'A mind-bending thriller about dream infiltration and reality manipulation.'
@@ -29,7 +28,7 @@ const sampleRecommendations = [
 	{
 		id: 2,
 		title: 'The Matrix',
-		poster: '/api/placeholder/200/300',
+		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZNl1EYS9z4PfNViNWMK_V5ZspshcWfksobw&s',
 		rating: 8.7,
 		genres: ['Sci-Fi', 'Action'],
 		description: 'A computer programmer discovers the hidden truth about his reality.'
@@ -37,7 +36,7 @@ const sampleRecommendations = [
 	{
 		id: 3,
 		title: 'Interstellar',
-		poster: '/api/placeholder/200/300',
+		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK6tdN2LCV5E1ktnQu82L6m4JX8kP4UwnLJQ&s',
 		rating: 8.6,
 		genres: ['Sci-Fi', 'Drama', 'Adventure'],
 		description: 'A team of explorers travel through a wormhole in space in search of a new home for humanity.'
@@ -45,8 +44,6 @@ const sampleRecommendations = [
 ];
 
 const MovieRecommenderDashboard = () => {
-	const [recommendations, setRecommendations] = useState(sampleRecommendations);
-
 	return (
 		<Container maxWidth="lg" sx={{ py: 4 }}>
 			<Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
@@ -57,7 +54,7 @@ const MovieRecommenderDashboard = () => {
 			</Box>
 
 			<Grid container spacing={3}>
-				{recommendations.map((movie) => (
+				{sampleRecommendations.map((movie) => (
 					<Grid size={{ xs: 12, sm: 6, md: 4 }} key={movie.id}>
 						<Card
 							sx={{

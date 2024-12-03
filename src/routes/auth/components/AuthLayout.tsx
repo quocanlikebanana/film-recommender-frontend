@@ -15,6 +15,7 @@ const AuthLayout: React.FC = () => {
 				backgroundImage: `url(${background})`,
 				backgroundSize: 'auto',
 				backgroundPosition: 'center',
+				paddingY: 3
 			}}>
 				<Outlet />
 			</Box>

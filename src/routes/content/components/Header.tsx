@@ -13,7 +13,10 @@ import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { ListItemButton } from "@mui/material";
+import { ListItemButton, Menu, MenuItem } from "@mui/material";
+import { useLogoutMutation } from "../services/logout.api";
+import { useContentContext } from "../context/Content.hook";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -52,12 +55,35 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 	},
 }));
 
+const drawerWidth = 240;
+
 const Header: React.FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+	const [logout] = useLogoutMutation();
+	const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
+	const navigate = useNavigate();
 
 	const toggleDrawer = (open: boolean) => () => {
 		setDrawerOpen(open);
 	};
+
+	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorElUser(event.currentTarget);
+	};
+
+	const handleCloseUserMenu = () => {
+		setAnchorElUser(null);
+	};
+
+	const handleLogout = async () => {
+		handleOpenBackdrop();
+		await logout();
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		handleCloseBackdrop();
+		handleCloseUserMenu();
+		navigate("/login");
+	}
 
 	return (
 		<AppBar position="static">
@@ -72,7 +98,13 @@ const Header: React.FC = () => {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+					<Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}
+						sx={{
+							'& .MuiDrawer-paper': {
+								boxSizing: 'border-box',
+								width: drawerWidth
+							},
+						}}>
 						<List>
 							<ListItemButton>
 								<ListItemText primary="Now Showing" />
@@ -88,12 +120,30 @@ const Header: React.FC = () => {
 				</Box>
 
 				{/* Logo */}
-				<Typography variant="h6" sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
-					MovieTime
+				<Typography
+					variant="h6"
+					component="a"
+					href="#"
+					noWrap
+					sx={{
+						fontFamily: "fantasy",
+						fontWeight: 400,
+						textDecoration: 'none',
+						flexGrow: 1,
+						letterSpacing: '0rem',
+						display: { xs: "none", sm: "block" }
+					}}>
+					Film Recommender
 				</Typography>
 
 				{/* Search Bar */}
-				<Search sx={{ flexGrow: 1 }}>
+				<Search sx={{
+					flexGrow: 1,
+					marginX: {
+						xs: '1rem',
+						md: '0'
+					}
+				}}>
 					<SearchIconWrapper>
 						<SearchIcon />
 					</SearchIconWrapper>
@@ -110,10 +160,37 @@ const Header: React.FC = () => {
 					<Button color="inherit">Offers</Button>
 				</Box>
 
-				{/* User Profile or Login */}
-				<IconButton edge="end" color="inherit" aria-label="account">
-					<AccountCircle />
-				</IconButton>
+				{/* User Profile or Login - Signup */}
+				<Box sx={{ flexGrow: 0 }}>
+					<IconButton
+						id="user-icon-button"
+						edge="end"
+						color="inherit"
+						aria-label="account"
+						onClick={handleOpenUserMenu}>
+						<AccountCircle />
+					</IconButton>
+					<Menu
+						id="user-menu"
+						sx={{ mt: '40px' }}
+						anchorEl={anchorElUser}
+						anchorOrigin={{
+							vertical: 'top',
+							horizontal: 'right',
+						}}
+						keepMounted
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'right',
+						}}
+						open={Boolean(anchorElUser)}
+						onClose={handleCloseUserMenu}
+					>
+						<MenuItem onClick={handleLogout}>
+							<Typography sx={{ textAlign: "left" }}>Logout</Typography>
+						</MenuItem>
+					</Menu>
+				</Box>
 			</Toolbar>
 		</AppBar>
 	);
