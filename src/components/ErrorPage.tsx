@@ -1,43 +1,76 @@
-import { isRouteErrorResponse, useRouteError } from "react-router-dom";
-import ClientError from "../error/client.error";
+import React from "react";
+import { Box, Typography, Button, Container } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { useRouteError } from "react-router-dom";
+import resolveErrorMessage from "../error/resolve.error";
+import background from "../assets/background.jpg";
 
-export default function ErrorPage() {
+const ErrorPage: React.FC = () => {
 	const error = useRouteError();
-	let errorMessage: string;
+	const errorMessage = resolveErrorMessage(error);
 
-	if (isRouteErrorResponse(error)) {
-		// error is type `ErrorResponse`
-		if (error.data && error.data.message) {
-			errorMessage = error.data.message;
-		} else if (error.status === 404) {
-			errorMessage = "This page doesn't exist!"
-		} else if (error.status === 401) {
-			errorMessage = "You aren't authorized to see this!"
-		} else if (error.status === 503) {
-			errorMessage = "Looks like our API is down."
-		} else if (error.status === 418) {
-			errorMessage = "I'm a teapot";
-		} else {
-			errorMessage = "Something went wrong";
-		}
-	} else if (error instanceof ClientError) {
-		errorMessage = error.displayMessage;
-	} else if (error instanceof Error) {
-		console.error(error);
-		errorMessage = error.message;
-	} else if (typeof error === 'string') {
-		errorMessage = error;
-	} else {
-		console.error(error);
-		errorMessage = 'Unknown error';
-	}
 	return (
-		<div id="error-page">
-			<h1>Oops!</h1>
-			<p>Sorry, an unexpected error has occurred.</p>
-			<p>
-				<i>{errorMessage}</i>
-			</p>
-		</div>
+		<Container sx={{
+			display: "flex",
+			flexDirection: "column",
+			alignItems: "center",
+			justifyContent: "center",
+			minHeight: '100vh',
+			minWidth: '100%',
+			backgroundImage: `url(${background})`,
+			backgroundSize: 'cover',
+			backgroundPosition: 'center',
+			margin: 0,
+			padding: 0,
+		}}>
+			<Container
+				maxWidth="sm"
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					flexDirection: "column",
+					textAlign: "center",
+					backgroundColor: "#f5f5f5",
+					borderRadius: 2,
+					boxShadow: 3,
+					padding: 4,
+				}}
+			>
+				{/* Error Icon */}
+				<ErrorOutlineIcon
+					sx={{ fontSize: 80, color: "error.main", mb: 2 }}
+				/>
+
+				{/* Error Message */}
+				<Typography variant="h4" gutterBottom>
+					Oops! Something Went Wrong
+				</Typography>
+				<Typography variant="body1" color="textSecondary" sx={{ mb: 3 }}>
+					{errorMessage}
+				</Typography>
+
+				{/* Retry or Home Button */}
+				<Box sx={{ mt: 2 }}>
+					<Button
+						variant="contained"
+						color="primary"
+						sx={{ mr: 2 }}
+						onClick={() => window.location.reload()}
+					>
+						Retry
+					</Button>
+					<Button
+						variant="outlined"
+						color="primary"
+						href="/"
+					>
+						Go to Homepage
+					</Button>
+				</Box>
+			</Container>
+		</Container>
 	);
-}
+};
+
+export default ErrorPage;

@@ -1,70 +1,122 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import {
+	Box,
+	Grid2 as Grid,
+	Typography,
+	Card,
+	CardMedia,
+	CardContent,
+	Button,
+	Container,
+	Chip,
+} from '@mui/material';
+import {
+	Star as StarIcon,
+	PlayCircleOutline as PlayIcon,
+	Recommend as RecommendIcon
+} from '@mui/icons-material';
 
-const DashboardPage: React.FC = () => {
-	const navigate = useNavigate()
-	function handleStartNowClick() {
-		navigate("/work");
+// Sample movie data (you would replace this with actual API data)
+const sampleRecommendations = [
+	{
+		id: 1,
+		title: 'Inception',
+		poster: '/api/placeholder/200/300',
+		rating: 8.8,
+		genres: ['Sci-Fi', 'Action', 'Thriller'],
+		description: 'A mind-bending thriller about dream infiltration and reality manipulation.'
+	},
+	{
+		id: 2,
+		title: 'The Matrix',
+		poster: '/api/placeholder/200/300',
+		rating: 8.7,
+		genres: ['Sci-Fi', 'Action'],
+		description: 'A computer programmer discovers the hidden truth about his reality.'
+	},
+	{
+		id: 3,
+		title: 'Interstellar',
+		poster: '/api/placeholder/200/300',
+		rating: 8.6,
+		genres: ['Sci-Fi', 'Drama', 'Adventure'],
+		description: 'A team of explorers travel through a wormhole in space in search of a new home for humanity.'
 	}
+];
+
+const MovieRecommenderDashboard = () => {
+	const [recommendations, setRecommendations] = useState(sampleRecommendations);
 
 	return (
-		<main className="flex-1 bg-gray-100">
-			{/* Hero Section */}
-			<section className="p-8">
-				<div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center">
-					<div className="flex-1 space-y-6">
-						<h1 className="text-4xl font-bold">
-							Your Goals, Your Way With{" "}
-							<span className="text-pink-500">Nitodo</span>
-						</h1>
-						<div className="w-full h-64 bg-gray-300 rounded-lg"></div>
-					</div>
-				</div>
-			</section>
+		<Container maxWidth="lg" sx={{ py: 4 }}>
+			<Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
+				<RecommendIcon sx={{ mr: 2, fontSize: 40 }} color="primary" />
+				<Typography variant="h4" component="h1" fontWeight="bold">
+					Movie Recommendations
+				</Typography>
+			</Box>
 
-			{/* Features Section */}
-			<section className="py-12">
-				<div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-					{[
-						{
-							title: "Task Analysis",
-							description:
-								"Break down tasks into smaller, manageable subtasks and arrange them with activity diagrams.",
-						},
-						{
-							title: "AI-Powered",
-							description:
-								"Incorporates AI to provide suggestions on different operations.",
-						},
-						{
-							title: "Templates",
-							description:
-								"Task analyses can be saved as templates for reuse on similar tasks.",
-						},
-						{
-							title: "Customization",
-							description:
-								"Customize your task as well with diverse content and success measurement.",
-						},
-					].map((feature, index) => (
-						<div
-							key={index}
-							className="bg-white p-6 rounded-lg shadow-md text-center space-y-4"
+			<Grid container spacing={3}>
+				{recommendations.map((movie) => (
+					<Grid size={{ xs: 12, sm: 6, md: 4 }} key={movie.id}>
+						<Card
+							sx={{
+								height: '100%',
+								display: 'flex',
+								flexDirection: 'column',
+								transition: 'transform 0.3s',
+								'&:hover': {
+									transform: 'scale(1.05)'
+								}
+							}}
+							elevation={4}
 						>
-							<div className="w-full h-32 bg-gray-200 rounded-lg"></div>
-							<h3 className="font-semibold text-lg">{feature.title}</h3>
-							<p className="text-sm text-gray-600">{feature.description}</p>
-						</div>
-					))}
-				</div>
-				<div className="flex justify-center mt-8">
-					<button onClick={handleStartNowClick} className="px-6 py-3 bg-purple-500 text-white font-bold rounded-lg shadow-lg hover:bg-purple-600">
-						Start Now
-					</button>
-				</div>
-			</section>
-		</main>
+							<CardMedia
+								component="img"
+								height="300"
+								image={movie.poster}
+								alt={movie.title}
+							/>
+							<CardContent sx={{ flexGrow: 1 }}>
+								<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+									<Typography variant="h6" component="h2">
+										{movie.title}
+									</Typography>
+									<Box sx={{ display: 'flex', alignItems: 'center' }}>
+										<StarIcon color="warning" sx={{ mr: 1 }} />
+										<Typography variant="body2" color="text.secondary">
+											{movie.rating}
+										</Typography>
+									</Box>
+								</Box>
+								<Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+									{movie.description}
+								</Typography>
+								<Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+									{movie.genres.map((genre) => (
+										<Chip
+											key={genre}
+											label={genre}
+											size="small"
+											color="primary"
+											variant="outlined"
+										/>
+									))}
+								</Box>
+								<Button
+									variant="contained"
+									startIcon={<PlayIcon />}
+									fullWidth
+								>
+									Watch Trailer
+								</Button>
+							</CardContent>
+						</Card>
+					</Grid>
+				))}
+			</Grid>
+		</Container>
 	);
 };
 
-export default DashboardPage;
+export default MovieRecommenderDashboard;

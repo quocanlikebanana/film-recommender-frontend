@@ -154,7 +154,7 @@ const RegisterPage: React.FC = () => {
 						<Button
 							type='submit'
 							variant="contained"
-							color="secondary"
+							color="primary"
 							disabled={isLoading}
 							fullWidth
 							sx={{

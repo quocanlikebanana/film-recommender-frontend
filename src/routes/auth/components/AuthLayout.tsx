@@ -13,7 +13,7 @@ const AuthLayout: React.FC = () => {
 				justifyContent: 'center',
 				minHeight: '100vh',
 				backgroundImage: `url(${background})`,
-				backgroundSize: 'cover',
+				backgroundSize: 'auto',
 				backgroundPosition: 'center',
 			}}>
 				<Outlet />

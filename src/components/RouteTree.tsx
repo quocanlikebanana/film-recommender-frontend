@@ -7,8 +7,6 @@ import LoginPage from "../routes/auth/login.page";
 import ProtectedRoute from "./ProtectedRoute";
 import ContentLayout from "../routes/content/components/ContentLayout";
 import DashboardPage from "../routes/content/dashboard.page";
-import WorkListPage from "../routes/content/worklist.page";
-import CreateWorkPage from "../routes/content/createWork/create-work.page";
 
 const path = {
 	register: '/register',
@@ -44,14 +42,6 @@ const router = createBrowserRouter([
 					{
 						path: "/",
 						element: <DashboardPage />
-					},
-					{
-						path: path.work,
-						element: <WorkListPage />
-					},
-					{
-						path: path.createWork,
-						element: <CreateWorkPage />
 					},
 				],
 			}
