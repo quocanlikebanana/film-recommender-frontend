@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Grid2, Fade } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Fade, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -8,6 +8,7 @@ import { useRegisterMutation } from './services/authApi';
 import { useAppSelector } from '../../app/hooks';
 import { toErrorMessage } from '../../error/fetchBaseQuery.error';
 import { selectIsAuth } from '../../stores/authSlice';
+import GoogleIcon from '@mui/icons-material/Google';
 
 
 const formSchema = z.object({
@@ -77,14 +78,14 @@ const RegisterPage: React.FC = () => {
 							variant="h4"
 							component="h1"
 							sx={{
-								background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+								background: 'linear-gradient(45deg, #ff4545 10%, #edaa37 90%)',
 								WebkitBackgroundClip: 'text',
 								WebkitTextFillColor: 'transparent',
 								fontWeight: 'bold',
-								mb: 3,
+								mb: 5,
 							}}
 						>
-							Create Your Account
+							Create Account
 						</Typography>
 
 						{/* Announcement */}
@@ -101,9 +102,12 @@ const RegisterPage: React.FC = () => {
 								{errorMessage}
 							</Alert>
 						}
+
+						{/* Form */}
 						<TextField
 							{...formRegister("firstName")}
 							label="First Name"
+							size="small"
 							variant="outlined"
 							name="firstName"
 							error={Boolean(errors.firstName != null)}
@@ -114,6 +118,7 @@ const RegisterPage: React.FC = () => {
 						<TextField
 							{...formRegister("lastName")}
 							label="Last Name"
+							size="small"
 							variant="outlined"
 							name="lastName"
 							error={Boolean(errors.lastName != null)}
@@ -124,6 +129,7 @@ const RegisterPage: React.FC = () => {
 						<TextField
 							{...formRegister("email")}
 							label="Email"
+							size="small"
 							variant="outlined"
 							name="email"
 							error={Boolean(errors.email != null)}
@@ -134,6 +140,7 @@ const RegisterPage: React.FC = () => {
 						<TextField
 							{...formRegister("password")}
 							label="Password"
+							size="small"
 							variant="outlined"
 							name="password"
 							type="password"
@@ -143,26 +150,65 @@ const RegisterPage: React.FC = () => {
 							sx={{ mb: 2 }}
 						/>
 
-						<Grid2 container spacing={1} width={1}>
-							<Grid2 size={{ xs: 12, sm: 6 }}>
-								<Button type='submit' variant="contained" color="secondary" disabled={isLoading} fullWidth
+						{/* Submit Button */}
+						<Button
+							type='submit'
+							variant="contained"
+							color="secondary"
+							disabled={isLoading}
+							fullWidth
+							sx={{
+								mt: 2,
+								fontWeight: 'bold',
+								py: 1,
+							}}>
+							Register
+						</Button>
+
+						{/*Google Login*/}
+						<Divider
+							sx={{
+								'&::before, &::after': {
+									borderColor: 'rgba(0, 0, 0, 0.5)',
+								},
+								my: 2,
+								width: '100%',
+								color: 'rgba(0, 0, 0, 0.5)',
+							}}>
+							OR
+						</Divider>
+
+						<Button
+							fullWidth
+							variant="outlined"
+							startIcon={<GoogleIcon />}
+							className='py-2 my-4 border-red-600 text-red-600'
+						>
+							Continue with Google
+						</Button>
+
+						{/* Login Link */}
+						<Box textAlign="left" sx={{
+							mt: 2,
+							width: '100%',
+						}}>
+							<Typography variant="body2">
+								Already have an account?
+								<Button
+									size="small"
+									onClick={handleLoginNavigate}
 									sx={{
-										height: "3rem",
-										fontWeight: 'bold',
-									}}>
-									Register
-								</Button>
-							</Grid2>
-							<Grid2 size={{ xs: 12, sm: 6 }}>
-								<Button variant="outlined" color="secondary" disabled={isLoading} onClick={handleLoginNavigate} fullWidth
-									sx={{
-										height: "3rem",
-										fontWeight: 'bold',
-									}}>
+										color: '#1e88e5',
+										'&:hover': {
+											backgroundColor: 'transparent',
+											textDecoration: 'underline'
+										}
+									}}
+								>
 									Login
 								</Button>
-							</Grid2>
-						</Grid2>
+							</Typography>
+						</Box>
 					</Box>
 				</Box>
 			</form>

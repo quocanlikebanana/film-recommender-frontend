@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Slide } from '@mui/material';
-import sunsetImage from '/src/assets/sunset.jpg';
+import background from '/src/assets/background.jpg';
 import { Outlet } from 'react-router-dom';
 
 
@@ -12,7 +12,7 @@ const AuthLayout: React.FC = () => {
 				alignItems: 'center',
 				justifyContent: 'center',
 				minHeight: '100vh',
-				backgroundImage: `url(${sunsetImage})`,
+				backgroundImage: `url(${background})`,
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 			}}>

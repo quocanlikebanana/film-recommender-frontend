@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Grid2, Fade } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Fade, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -8,6 +8,7 @@ import { useLoginMutation } from './services/authApi';
 import { useAppSelector } from '../../app/hooks';
 import { selectIsAuth } from '../../stores/authSlice';
 import { toErrorMessage } from '../../error/fetchBaseQuery.error';
+import GoogleIcon from '@mui/icons-material/Google';
 
 
 const formSchema = z.object({
@@ -75,11 +76,11 @@ const LoginPage: React.FC = () => {
 							variant="h4"
 							component="h1"
 							sx={{
-								background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+								background: 'linear-gradient(45deg, #ff4545 10%, #edaa37 90%)',
 								WebkitBackgroundClip: 'text',
 								WebkitTextFillColor: 'transparent',
 								fontWeight: 'bold',
-								mb: 3,
+								mb: 5,
 							}}
 						>
 							Login
@@ -100,9 +101,11 @@ const LoginPage: React.FC = () => {
 							</Alert>
 						}
 
+						{/* Form */}
 						<TextField
 							{...register('email')}
 							label="Email"
+							size="small"
 							variant="outlined"
 							name="email"
 							error={Boolean(errors.email != null)}
@@ -113,6 +116,7 @@ const LoginPage: React.FC = () => {
 						<TextField
 							{...register('password')}
 							label="Password"
+							size="small"
 							variant="outlined"
 							name="password"
 							type="password"
@@ -122,36 +126,65 @@ const LoginPage: React.FC = () => {
 							sx={{ mb: 2 }}
 						/>
 
-						<Grid2 container spacing={1} width={1}>
-							<Grid2 size={{ xs: 12, sm: 6 }}>
+						{/* Submit Button */}
+						<Button
+							type='submit'
+							variant="contained"
+							color="primary"
+							disabled={isLoading}
+							fullWidth
+							sx={{
+								mt: 2,
+								fontWeight: 'bold',
+								py: 1,
+							}}>
+							Login
+						</Button>
+
+						{/*Google Login*/}
+						<Divider
+							sx={{
+								'&::before, &::after': {
+									borderColor: 'rgba(0, 0, 0, 0.5)',
+								},
+								my: 2,
+								width: '100%',
+								color: 'rgba(0, 0, 0, 0.5)',
+							}}>
+							OR
+						</Divider>
+
+						<Button
+							fullWidth
+							variant="outlined"
+							startIcon={<GoogleIcon />}
+							className='py-2 my-4 border-red-600 text-red-600'
+						>
+							Continue with Google
+						</Button>
+
+						{/* Register Link */}
+						<Box textAlign="left" sx={{
+							mt: 2,
+							width: '100%',
+						}}>
+							<Typography variant="body2">
+								Don't have an account?
 								<Button
-									type='submit'
-									variant="contained"
-									color="primary"
-									disabled={isLoading}
-									fullWidth
-									sx={{
-										height: "3rem",
-										fontWeight: 'bold',
-									}}>
-									Login
-								</Button>
-							</Grid2>
-							<Grid2 size={{ xs: 12, sm: 6 }}>
-								<Button
-									variant="outlined"
-									color="primary"
-									disabled={isLoading}
+									size="small"
 									onClick={handleNavigateRegister}
-									fullWidth
 									sx={{
-										height: "3rem",
-										fontWeight: 'bold',
-									}}>
-									Register
+										color: '#1e88e5',
+										'&:hover': {
+											backgroundColor: 'transparent',
+											textDecoration: 'underline'
+										}
+									}}
+								>
+									Sign Up
 								</Button>
-							</Grid2>
-						</Grid2>
+							</Typography>
+						</Box>
 					</Box>
 				</Box >
 			</form>
