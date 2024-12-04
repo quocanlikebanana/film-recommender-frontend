@@ -48,7 +48,7 @@ const router = createBrowserRouter([
 		]
 	}
 ], {
-	basename: '/RegAppFrontend/'
+	basename: '/'
 });
 
 export default router;
