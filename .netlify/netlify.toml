@@ -2,7 +2,6 @@ functionsDirectory = "D:\\Desktop\\FileRecommender\\film-recommender-frontend\\n
 functionsDirectoryOrigin = "ui"
 plugins = []
 headers = []
-redirects = []
 
 [functions]
 
@@ -29,3 +28,15 @@ functions = "D:\\Desktop\\FileRecommender\\film-recommender-frontend\\netlify\\f
 [build.processing.js]
 
 [build.services]
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
