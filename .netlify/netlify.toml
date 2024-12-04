@@ -1,0 +1,31 @@
+functionsDirectory = "D:\\Desktop\\FileRecommender\\film-recommender-frontend\\netlify\\functions"
+functionsDirectoryOrigin = "ui"
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "D:\\Desktop\\FileRecommender\\film-recommender-frontend\\dist"
+publishOrigin = "ui"
+commandOrigin = "ui"
+base = "D:\\Desktop\\FileRecommender\\film-recommender-frontend"
+command = "npm run build"
+functions = "D:\\Desktop\\FileRecommender\\film-recommender-frontend\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

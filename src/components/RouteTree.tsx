@@ -11,8 +11,6 @@ import DashboardPage from "../routes/content/dashboard.page";
 const path = {
 	register: '/register',
 	login: '/login',
-	work: '/work',
-	createWork: '/work/create',
 }
 
 const router = createBrowserRouter([

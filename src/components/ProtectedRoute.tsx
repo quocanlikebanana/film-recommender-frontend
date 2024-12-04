@@ -6,7 +6,6 @@ import { noAuth } from '../app/env';
 
 
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
-	// Route protect from Frontend -> still crackable
 	const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
 	return (isAuthenticated || noAuth) ? children : <Navigate to="/login" />;
 };
