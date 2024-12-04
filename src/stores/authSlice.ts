@@ -4,12 +4,14 @@ import authApi, { AuthResponse, Token } from '../routes/auth/services/authApi.ts
 import LocalStorageService from '../services/localstorage.service.ts';
 import logoutApi from '../routes/content/services/logout.api.ts';
 
+type UserSessionInfo = {
+	email: string;
+	firstName: string;
+	lastName: string;
+}
+
 interface AuthState {
-	user: {
-		email: string;
-		firstName: string;
-		lastName: string;
-	} | null,
+	user: UserSessionInfo | null,
 	token: Token | null,
 };
 
@@ -31,7 +33,7 @@ const initialState: AuthState = ((): AuthState => {
 	}
 })();
 
-function setAuthState(state: AuthState, action: PayloadAction<AuthResponse>) {
+function setApiAuthState(state: AuthState, action: PayloadAction<AuthResponse>) {
 	state.user = {
 		email: action.payload.email,
 		firstName: action.payload.firstName,
@@ -44,23 +46,33 @@ function setAuthState(state: AuthState, action: PayloadAction<AuthResponse>) {
 const authSlice = createSlice({
 	name: 'auth',
 	initialState,
-	reducers: {},
+	reducers: {
+		// setToken(state, action: PayloadAction<Token>) {
+		// 	state.token = action.payload;
+		// 	LocalStorageService.setTokens(action.payload);
+		// }
+	},
 	extraReducers: (builder) => {
 		builder
 			.addMatcher(
 				authApi.endpoints.login.matchFulfilled,
 				(state, action) => {
-					setAuthState(state, action);
+					setApiAuthState(state, action);
 				})
 			.addMatcher(
 				authApi.endpoints.register.matchFulfilled,
 				(state, action) => {
-					setAuthState(state, action);
+					setApiAuthState(state, action);
 				})
 			.addMatcher(
 				authApi.endpoints.refresh.matchFulfilled, (state, action) => {
-					setAuthState(state, action);
+					setApiAuthState(state, action);
 				})
+			.addMatcher(
+				authApi.endpoints.googleAuth.matchFulfilled, (state, action) => {
+					setApiAuthState(state, action);
+				}
+			)
 			.addMatcher(
 				(action) =>
 					logoutApi.endpoints.logout.matchFulfilled(action) ||

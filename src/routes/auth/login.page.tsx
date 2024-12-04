@@ -8,7 +8,7 @@ import { useLoginMutation } from './services/authApi';
 import { useAppSelector } from '../../app/hooks';
 import { selectIsAuth } from '../../stores/authSlice';
 import { toErrorMessage } from '../../error/fetchBaseQuery.error';
-import GoogleIcon from '@mui/icons-material/Google';
+import GoogleLogin from './components/GoogleLogin';
 
 
 const formSchema = z.object({
@@ -154,14 +154,7 @@ const LoginPage: React.FC = () => {
 							OR
 						</Divider>
 
-						<Button
-							fullWidth
-							variant="outlined"
-							startIcon={<GoogleIcon />}
-							className='py-2 my-4 border-red-600 text-red-600'
-						>
-							Continue with Google
-						</Button>
+						<GoogleLogin />
 
 						{/* Register Link */}
 						<Box textAlign="left" sx={{

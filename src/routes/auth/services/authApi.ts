@@ -56,13 +56,22 @@ const authApi = createApi({
 				body: { refreshToken },
 			}),
 		}),
+
+		googleAuth: builder.mutation<AuthResponse, { idToken: string }>({
+			query: ({ idToken }) => ({
+				url: 'auth/loginWithGoogle',
+				method: 'POST',
+				body: { idToken },
+			}),
+		}),
 	})
 });
 
 export const {
 	useLoginMutation,
 	useRegisterMutation,
-	useRefreshMutation
+	useRefreshMutation,
+	useGoogleAuthMutation,
 } = authApi;
 
 export type { AuthResponse, Token };
