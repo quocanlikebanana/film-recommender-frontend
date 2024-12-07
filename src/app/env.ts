@@ -1,7 +1,7 @@
 const backendURL = import.meta.env.VITE_BACKEND_URL as string;
 const isDevelopment = import.meta.env.DEV;
 
-const noAuth: boolean = import.meta.env.VITE_NO_AUTH == "true" ? true : false;
+const noAuth: boolean = isDevelopment && import.meta.env.VITE_NO_AUTH == "true" ? true : false;
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
