@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import store from './app/store';
 import router from './components/RouteTree';
 
-
 function App() {
 	return (
 		<Provider store={store}>

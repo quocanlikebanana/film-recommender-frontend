@@ -6,7 +6,7 @@ import RegisterPage from "../routes/auth/register.page";
 import LoginPage from "../routes/auth/login.page";
 import ProtectedRoute from "./ProtectedRoute";
 import ContentLayout from "../routes/content/components/ContentLayout";
-import DashboardPage from "../routes/content/dashboard.page";
+import DashboardPage from "../routes/content/dashboard/dashboard.page";
 import DetailPage from "../routes/content/detail.page";
 
 const path = {

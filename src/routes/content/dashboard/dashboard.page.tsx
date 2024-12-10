@@ -14,6 +14,9 @@ import {
 	PlayCircleOutline as PlayIcon,
 	Recommend as RecommendIcon
 } from '@mui/icons-material';
+import { useGetTrendingMoviesQuery } from './services/dashboard.api';
+import MovieGrid from './components/MovieGrid';
+import mockMovies from '../interfaces/mock';
 
 
 const sampleRecommendations = [
@@ -43,7 +46,10 @@ const sampleRecommendations = [
 	}
 ];
 
+
 const MovieRecommenderDashboard = () => {
+	const trendingMovies = mockMovies;
+
 	return (
 		<Container maxWidth="lg" sx={{ py: 4 }}>
 			<Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
@@ -53,7 +59,9 @@ const MovieRecommenderDashboard = () => {
 				</Typography>
 			</Box>
 
-			<Grid container spacing={3}>
+			<MovieGrid movies={trendingMovies} />
+
+			{/* <Grid container spacing={3}>
 				{sampleRecommendations.map((movie) => (
 					<Grid size={{ xs: 12, sm: 6, md: 4 }} key={movie.id}>
 						<Card
@@ -111,7 +119,7 @@ const MovieRecommenderDashboard = () => {
 						</Card>
 					</Grid>
 				))}
-			</Grid>
+			</Grid> */}
 		</Container>
 	);
 };
