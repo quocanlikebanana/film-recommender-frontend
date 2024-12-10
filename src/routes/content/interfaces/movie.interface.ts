@@ -50,10 +50,3 @@ export interface MovieDetailResponse {
     vote_average: number;
     vote_count: number;
 }
-
-export interface Paged<T> {
-    page: number;
-    results: T[];
-    total_pages: number;
-    total_results: number;
-}

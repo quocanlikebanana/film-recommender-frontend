@@ -1,125 +1,52 @@
 import {
 	Box,
-	Grid2 as Grid,
 	Typography,
-	Card,
-	CardMedia,
-	CardContent,
 	Button,
 	Container,
-	Chip,
+	Stack,
 } from '@mui/material';
 import {
-	Star as StarIcon,
-	PlayCircleOutline as PlayIcon,
 	Recommend as RecommendIcon
 } from '@mui/icons-material';
-import { useGetTrendingMoviesQuery } from './services/dashboard.api';
-import MovieGrid from './components/MovieGrid';
-import mockMovies from '../interfaces/mock';
-
-
-const sampleRecommendations = [
-	{
-		id: 1,
-		title: 'Inception',
-		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXWnBnPN47nWvqWJAxw-vmchKc_2u1zkG6Bw&s',
-		rating: 8.8,
-		genres: ['Sci-Fi', 'Action', 'Thriller'],
-		description: 'A mind-bending thriller about dream infiltration and reality manipulation.'
-	},
-	{
-		id: 2,
-		title: 'The Matrix',
-		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZNl1EYS9z4PfNViNWMK_V5ZspshcWfksobw&s',
-		rating: 8.7,
-		genres: ['Sci-Fi', 'Action'],
-		description: 'A computer programmer discovers the hidden truth about his reality.'
-	},
-	{
-		id: 3,
-		title: 'Interstellar',
-		poster: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK6tdN2LCV5E1ktnQu82L6m4JX8kP4UwnLJQ&s',
-		rating: 8.6,
-		genres: ['Sci-Fi', 'Drama', 'Adventure'],
-		description: 'A team of explorers travel through a wormhole in space in search of a new home for humanity.'
-	}
-];
+import MovieCard from './components/MovieCard';
+import { mockTrendingMovies } from './services/mock';
 
 
 const MovieRecommenderDashboard = () => {
-	const trendingMovies = mockMovies;
 
 	return (
 		<Container maxWidth="lg" sx={{ py: 4 }}>
 			<Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
 				<RecommendIcon sx={{ mr: 2, fontSize: 40 }} color="primary" />
 				<Typography variant="h4" component="h1" fontWeight="bold">
-					Movie Recommendations
+					Movie Trendings
 				</Typography>
 			</Box>
 
-			<MovieGrid movies={trendingMovies} />
+			<Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+				<Button variant="contained">All</Button>
+				<Button variant="outlined">Sci-Fi</Button>
+				<Button variant="outlined">Action</Button>
+				<Button variant="outlined">Thriller</Button>
+			</Stack>
 
-			{/* <Grid container spacing={3}>
-				{sampleRecommendations.map((movie) => (
-					<Grid size={{ xs: 12, sm: 6, md: 4 }} key={movie.id}>
-						<Card
-							sx={{
-								height: '100%',
-								display: 'flex',
-								flexDirection: 'column',
-								transition: 'transform 0.3s',
-								'&:hover': {
-									transform: 'scale(1.05)'
-								}
-							}}
-							elevation={4}
-						>
-							<CardMedia
-								component="img"
-								height="300"
-								image={movie.poster}
-								alt={movie.title}
-							/>
-							<CardContent sx={{ flexGrow: 1 }}>
-								<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-									<Typography variant="h6" component="h2">
-										{movie.title}
-									</Typography>
-									<Box sx={{ display: 'flex', alignItems: 'center' }}>
-										<StarIcon color="warning" sx={{ mr: 1 }} />
-										<Typography variant="body2" color="text.secondary">
-											{movie.rating}
-										</Typography>
-									</Box>
-								</Box>
-								<Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-									{movie.description}
-								</Typography>
-								<Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-									{movie.genres.map((genre) => (
-										<Chip
-											key={genre}
-											label={genre}
-											size="small"
-											color="primary"
-											variant="outlined"
-										/>
-									))}
-								</Box>
-								<Button
-									variant="contained"
-									startIcon={<PlayIcon />}
-									fullWidth
-								>
-									Watch Trailer
-								</Button>
-							</CardContent>
-						</Card>
-					</Grid>
-				))}
-			</Grid> */}
+			<Box sx={{
+				paddingY: 3,
+				display: 'flex',
+				justifyContent: 'center',
+				overflowX: "auto",
+				overflowY: "clip",
+				width: '100%',
+			}}>
+				<Stack direction="row" spacing={3} sx={{
+					height: '100%',
+					minWidth: 'fit-content',
+				}}>
+					{mockTrendingMovies.map((movie) => (
+						<MovieCard key={movie.id} movie={movie} />
+					))}
+				</Stack>
+			</Box>
 		</Container>
 	);
 };

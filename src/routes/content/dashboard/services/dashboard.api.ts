@@ -1,16 +1,36 @@
-import { MovieDetailResponse, Paged } from "../../interfaces/movie.interface";
-import protectedApi from "../../services/protectedApi";
+import { Paged } from "../../interfaces/common.type";
+import movieApi from "../../services/movieApi";
 
-interface TrendingRequest {
+export type TrendingMovieRequest = {
     timeWindow: 'day' | 'week';
     page: number;
 }
 
-const dashboardApi = protectedApi.injectEndpoints({
+type MovieDetailResponse = {
+    backdrop_path: string;
+    id: number;
+    title: string;
+    original_title: string;
+    overview: string;
+    poster_path: string;
+    media_type: string;
+    adult: boolean;
+    original_language: string;
+    genre_ids: number[];
+    popularity: number;
+    release_date: string;
+    video: boolean;
+    vote_average: number;
+    vote_count: number;
+}
+
+export type TrendingMovieResponse = Paged<MovieDetailResponse>;
+
+const dashboardApi = movieApi.injectEndpoints({
     endpoints: (builder) => ({
-        getTrendingMovies: builder.query<Paged<MovieDetailResponse>, TrendingRequest>({
+        getTrendingMovies: builder.query<TrendingMovieResponse, TrendingMovieRequest>({
             query: ({ timeWindow, page }) => ({
-                url: `trending/movie/${timeWindow}`,
+                url: `3/trending/movie/${timeWindow}`,
                 method: 'GET',
                 params: { page },
             }),
@@ -20,6 +40,5 @@ const dashboardApi = protectedApi.injectEndpoints({
 });
 
 export const {
-    useGetTrendingMoviesQuery,
     useLazyGetTrendingMoviesQuery,
 } = dashboardApi;
