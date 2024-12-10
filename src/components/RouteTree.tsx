@@ -7,6 +7,7 @@ import LoginPage from "../routes/auth/login.page";
 import ProtectedRoute from "./ProtectedRoute";
 import ContentLayout from "../routes/content/components/ContentLayout";
 import DashboardPage from "../routes/content/dashboard.page";
+import DetailPage from "../routes/content/detail.page";
 
 const path = {
 	register: '/register',
@@ -40,6 +41,16 @@ const router = createBrowserRouter([
 					{
 						path: "/",
 						element: <DashboardPage />
+					},
+				],
+			},
+			{
+				element:
+					<ContentLayout />,
+				children: [
+					{
+						path: "/movie",
+						element: <DetailPage />
 					},
 				],
 			}

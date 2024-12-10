@@ -3,6 +3,12 @@ const isDevelopment = import.meta.env.DEV;
 
 const noAuth: boolean = isDevelopment && import.meta.env.VITE_NO_AUTH == "true" ? true : false;
 
+const tmdbConfig = {
+	apiKey: import.meta.env.VITE_VITE_TMDB_API_KEY,
+	apiUrl: import.meta.env.VITE_TMDB_API_URL,
+	accessToken: import.meta.env.VITE_TMDB_ACCESS_TOKEN,
+}
+
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
 	authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -17,5 +23,6 @@ export {
 	backendURL,
 	isDevelopment,
 	noAuth,
-	firebaseConfig
+	firebaseConfig,
+	tmdbConfig
 };
