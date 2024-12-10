@@ -1,21 +1,18 @@
-import { Card, CardMedia, CardContent, Box, Typography, Chip, Button } from '@mui/material'
+import { Card, CardMedia, CardContent, Box, Typography, Button } from '@mui/material'
 import {
     Star as StarIcon,
     PlayCircleOutline as PlayIcon,
 } from '@mui/icons-material';
 
-interface MovieCardProps {
-    movie: {
-        id: string;
-        poster: string;
-        title: string;
-        rating: number;
-        description: string;
-        genres: string[];
-    };
+export interface MovieCardProps {
+    id: string;
+    poster: string;
+    title: string;
+    rating: number;
+    description: string;
 }
 
-export default function MovieCard({ movie }: MovieCardProps) {
+export default function MovieCard({ movie }: { movie: MovieCardProps }) {
     return (
         <Card key={movie.id}
             sx={{
@@ -63,7 +60,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
                     }}>
                         <StarIcon color="warning" sx={{ mr: 1 }} />
                         <Typography variant="body2" color="text.secondary">
-                            {movie.rating}
+                            {movie.rating.toFixed(1)}
                         </Typography>
                     </Box>
                 </Box>
@@ -77,23 +74,12 @@ export default function MovieCard({ movie }: MovieCardProps) {
                 }}>
                     {movie.description}
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                    {movie.genres.map((genre) => (
-                        <Chip
-                            key={genre}
-                            label={genre}
-                            size="small"
-                            color="primary"
-                            variant="outlined"
-                        />
-                    ))}
-                </Box>
                 <Button
                     variant="contained"
                     startIcon={<PlayIcon />}
                     fullWidth
                 >
-                    Watch Trailer
+                    Watch
                 </Button>
             </CardContent>
         </Card>
