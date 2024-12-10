@@ -7,10 +7,11 @@ const backendFetchQuery = fetchBaseQuery({
     baseUrl: tmdbConfig.apiUrl,
     prepareHeaders: (headers) => {
         headers.set('accept', 'application/json');
-        headers.set('Authorization', `Bearer ${tmdbConfig.apiKey}`);
         return headers;
     },
 });
+
+console.log(tmdbConfig.apiKey)
 
 const movieApi = createApi({
     reducerPath: movieApiReducerPath,
@@ -18,9 +19,12 @@ const movieApi = createApi({
     endpoints: (builder) => ({
         getMovieDetail: builder.query<MovieDetailResponse, { movieId: string }>({
             query: ({ movieId }) => ({
-                url: `movie/${movieId}`,
+                url: `3/movie/${movieId}`,
                 method: 'GET',
-                params: { language: 'en-US' },
+                params: {
+                    api_key: tmdbConfig.apiKey,
+                    language: 'en-US',
+                },
             }),
         }),
     }),

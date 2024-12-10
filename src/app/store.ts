@@ -1,26 +1,27 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from '../stores/authSlice';
 import authApi from '../routes/auth/services/authApi';
-import { setupListeners } from '@reduxjs/toolkit/query';
 import protectedApi from '../routes/content/services/protectedApi';
+import movieApi from '../routes/content/services/movieApi';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 
-// Create the root reducer so it can be used in configureStore
 const rootReducer = combineReducers({
 	auth: authReducer,
 	authApi: authApi.reducer,
 	protectedApi: protectedApi.reducer,
+	movieApi: movieApi.reducer,
 });
 
 const store = configureStore({
 	reducer: rootReducer,
-	middleware:
-		(getDefaultMiddleware) =>
-			getDefaultMiddleware({
-				serializableCheck: false,
-			})
-				.concat(authApi.middleware)
-				.concat(protectedApi.middleware),
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: false,
+		})
+			.concat(authApi.middleware)
+			.concat(protectedApi.middleware)
+			.concat(movieApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

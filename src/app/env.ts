@@ -4,7 +4,7 @@ const isDevelopment = import.meta.env.DEV;
 const noAuth: boolean = isDevelopment && import.meta.env.VITE_NO_AUTH == "true" ? true : false;
 
 const tmdbConfig = {
-	apiKey: import.meta.env.VITE_VITE_TMDB_API_KEY,
+	apiKey: import.meta.env.VITE_TMDB_API_KEY,
 	apiUrl: import.meta.env.VITE_TMDB_API_URL,
 	accessToken: import.meta.env.VITE_TMDB_ACCESS_TOKEN,
 }

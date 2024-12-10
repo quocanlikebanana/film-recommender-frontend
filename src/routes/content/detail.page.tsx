@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useGetMovieDetailQuery } from './services/movie.api';
+import { useGetMovieDetailQuery } from './services/movieApi';
 import { Container, Typography, CircularProgress, Alert } from '@mui/material';
 
 const MovieRecommenderDetail = () => {

@@ -49,7 +49,7 @@ const router = createBrowserRouter([
 					<ContentLayout />,
 				children: [
 					{
-						path: "/movie",
+						path: "/movies/:movieId",
 						element: <DetailPage />
 					},
 				],
