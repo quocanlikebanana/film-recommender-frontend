@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetMovieDetailQuery } from './services/movieApi';
 import { Container, CircularProgress, Alert, Card, CardContent, Grid } from '@mui/material';
