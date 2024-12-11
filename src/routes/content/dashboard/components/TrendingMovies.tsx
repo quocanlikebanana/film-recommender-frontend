@@ -5,6 +5,7 @@ import TrendingSwitch from './ToggleButton';
 import { useEffect, useState } from 'react';
 import { toTmdbImageUrl } from '../../../../app/image';
 import { Recommend as RecommendIcon } from '@mui/icons-material';
+import LocalError from '../../components/LocalError';
 
 export default function TrendingMovies() {
     const [getTrendingMovies, { data, isLoading, error }] = useLazyGetTrendingMoviesQuery();
@@ -14,11 +15,11 @@ export default function TrendingMovies() {
         getTrendingMovies({ timeWindow, page: 1 });
     }, [timeWindow, getTrendingMovies]);
 
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error!</p>;
-    if (!data) return null;
+    if (error) {
+        return <LocalError message="Error loading trending movies!" />;
+    }
 
-    const movies = data.results.map((movie) => ({
+    const movies = (data?.results ?? []).map((movie) => ({
         id: movie.id.toString(),
         poster: toTmdbImageUrl(movie.poster_path),
         title: movie.title,
@@ -58,7 +59,14 @@ export default function TrendingMovies() {
                     height: '100%',
                     minWidth: 'fit-content',
                 }}>
-                    {movies.map((movie) => (
+                    {isLoading ? (
+                        <>
+                            <MovieCard key="loading1" movie={null} />
+                            <MovieCard key="loading2" movie={null} />
+                            <MovieCard key="loading3" movie={null} />
+                            <MovieCard key="loading4" movie={null} />
+                        </>
+                    ) : movies.map((movie) => (
                         <MovieCard key={movie.id} movie={movie} />
                     ))}
                 </Stack>

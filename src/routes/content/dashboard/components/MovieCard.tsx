@@ -1,8 +1,9 @@
-import { Card, CardMedia, CardContent, Box, Typography, Button } from '@mui/material'
+import { Card, CardMedia, CardContent, Box, Typography, Button, Skeleton } from '@mui/material'
 import {
     Star as StarIcon,
     PlayCircleOutline as PlayIcon,
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 export interface MovieCardProps {
     id: string;
@@ -12,23 +13,61 @@ export interface MovieCardProps {
     description: string;
 }
 
-export default function MovieCard({ movie }: { movie: MovieCardProps }) {
-    return (
-        <Card key={movie.id}
+export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
+    const navigate = useNavigate();
+
+    if (!movie) return (
+        <Card
             sx={{
                 width: {
                     md: 250,
                     lg: 350,
                 },
-                height: 'auto',
+                height: 450,
                 display: 'flex',
                 justifyContent: 'space-between',
                 flexDirection: 'column',
                 transition: 'transform 0.3s',
                 '&:hover': {
-                    transform: 'scale(1.05)'
-                }
+                    transform: 'scale(1.05)',
+                },
             }}
+            elevation={4}
+        >
+            <Skeleton variant="rectangular" width="100%" height={200} />
+            <CardContent
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                }}
+            >
+                <Skeleton variant="text" width="80%" />
+                <Skeleton variant="text" width="60%" />
+            </CardContent>
+        </Card>
+    );
+
+    const handleWatch = () => {
+        if (!movie) return;
+        navigate(`/movies/${movie.id}`);
+    }
+
+    return (
+        <Card sx={{
+            width: {
+                md: 250,
+                lg: 350,
+            },
+            height: 'auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: 'column',
+            transition: 'transform 0.3s',
+            '&:hover': {
+                transform: 'scale(1.05)'
+            }
+        }}
             elevation={4}
         >
             <CardMedia
@@ -78,6 +117,7 @@ export default function MovieCard({ movie }: { movie: MovieCardProps }) {
                     variant="contained"
                     startIcon={<PlayIcon />}
                     fullWidth
+                    onClick={handleWatch}
                 >
                     Watch
                 </Button>

@@ -4,6 +4,7 @@ import PeopleCard, { People } from "./PeopleCard";
 import { useGetPopularPeopleQuery } from "../services/popular-people.api";
 import { toTmdbImageUrl } from "../../../../app/image";
 import StarsIcon from '@mui/icons-material/Stars';
+import LocalError from "../../components/LocalError";
 
 const PopularPeople: React.FC = () => {
     const [visibleCount, setVisibleCount] = useState(3);
@@ -14,15 +15,17 @@ const PopularPeople: React.FC = () => {
 
     const { data, isLoading, error } = useGetPopularPeopleQuery({ page: 1 });
 
-    if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>Error!</p>;
-    if (!data) return null;
+    if (error) {
+        return <LocalError message="Error loading popular people!" />;
+    }
+    if (isLoading || !data) return null;
 
     const peopleList: People[] = data.results.map((person) => ({
         id: person.id,
         name: person.name,
         department: person.known_for_department,
-        featuredWork: person.known_for[0].title,
+        featuredMovie: person.known_for[0].title,
+        featuredMovieId: person.known_for[0].id,
         description: person.known_for[0].overview,
         image: toTmdbImageUrl(person.profile_path),
     } as People));

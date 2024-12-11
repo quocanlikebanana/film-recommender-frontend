@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, TextField, Button } from "@mui/material";
 import heroBackground from "../../../../assets/hero-background.jpg";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
+    const [searchString, setSearchString] = useState("");
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        navigate(`/movies/search`, { state: { query: searchString } });
+    };
+
     return (
         <Box
             sx={{
@@ -52,6 +60,9 @@ const HeroSection: React.FC = () => {
                     <TextField
                         variant="outlined"
                         placeholder="Search for a movie, tv show, person..."
+                        value={searchString}
+                        onChange={(e) => setSearchString(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                         fullWidth
                         sx={{
                             backgroundColor: "white",
@@ -67,6 +78,7 @@ const HeroSection: React.FC = () => {
                     />
                     <Button
                         variant="contained"
+                        onClick={handleSearch}
                         sx={{
                             background: "linear-gradient(to right, #00c6ff, #0072ff)",
                             color: "white",

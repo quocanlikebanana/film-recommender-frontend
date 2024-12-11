@@ -1,11 +1,13 @@
 import { Box, Avatar, Typography, IconButton, Card, CardContent } from "@mui/material";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { useNavigate } from "react-router-dom";
 
 export interface People {
     id: number;
     name: string;
     department: string;
-    featuredWork: string;
+    featuredMovieId: number;
+    featuredMovie: string;
     description: string;
     image: string;
 }
@@ -15,6 +17,12 @@ interface PeopleCardProps {
 }
 
 export default function PeopleCard({ person }: PeopleCardProps) {
+    const navigate = useNavigate();
+
+    const handleMovieClick = () => {
+        navigate(`/movies/${person.featuredMovieId}`);
+    }
+
     return (
         <Card key={person.id} >
             <CardContent sx={{ display: "flex", mb: 3 }}>
@@ -33,8 +41,11 @@ export default function PeopleCard({ person }: PeopleCardProps) {
                     <Typography variant="body2" color="text.secondary">
                         {person.department}
                     </Typography>
-                    <Typography variant="body2" color="primary" sx={{ mb: 1 }}>
-                        {person.featuredWork}
+                    <Typography onClick={handleMovieClick} variant="body2" color="primary" sx={{
+                        mb: 1,
+                        cursor: "pointer",
+                    }}>
+                        {person.featuredMovie}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{
                         display: '-webkit-box',

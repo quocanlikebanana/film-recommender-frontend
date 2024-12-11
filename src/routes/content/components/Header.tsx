@@ -85,6 +85,11 @@ const Header: React.FC = () => {
 		navigate("/login");
 	}
 
+	const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+		event.preventDefault();
+		navigate("/");
+	}
+
 	return (
 		<AppBar position="static">
 			<Toolbar>
@@ -123,7 +128,8 @@ const Header: React.FC = () => {
 				<Typography
 					variant="h6"
 					component="a"
-					href="#"
+					href="#/"
+					onClick={handleLogoClick}
 					noWrap
 					sx={{
 						fontFamily: "fantasy",
