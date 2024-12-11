@@ -1,14 +1,15 @@
-import {
-	Container,
-} from '@mui/material';
-import MovieHorizontalStack from './components/MovieHorizontalStack';
+import TrendingMovies from './components/TrendingMovies';
+import HeroSection from './components/HeroSection';
+import PopularPeople from './components/PopularPeople';
 
 
 const Dashboard = () => {
 	return (
-		<Container maxWidth="lg" sx={{ py: 4 }}>
-			<MovieHorizontalStack />
-		</Container>
+		<div className='flex flex-col'>
+			<HeroSection />
+			<TrendingMovies />
+			<PopularPeople />
+		</div>
 	);
 };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid2 as Grid, Link, IconButton } from "@mui/material";
+import { Box, Typography, Grid2 as Grid, Link, IconButton, Divider } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -18,8 +18,8 @@ const Footer: React.FC = () => {
 			<Grid container spacing={4}>
 				{/* Quick Links Section */}
 				<Grid size={{ xs: 12, md: 4 }}>
-					<Typography variant="h6" gutterBottom>
-						Quick Links
+					<Typography variant="h6" gutterBottom fontWeight="bold">
+						Links
 					</Typography>
 					<Box>
 						<Link href="#" color="inherit" underline="hover" display="block">
@@ -36,17 +36,17 @@ const Footer: React.FC = () => {
 
 				{/* Contact Section */}
 				<Grid size={{ xs: 12, md: 4 }}>
-					<Typography variant="h6" gutterBottom>
+					<Typography variant="h6" gutterBottom fontWeight="bold">
 						Contact Us
 					</Typography>
 					<Typography variant="body2">Phone: (123) 456-7890</Typography>
-					<Typography variant="body2">Email: support@movietime.com</Typography>
-					<Typography variant="body2">Address: 123 Movie Lane, Filmtown, USA</Typography>
+					<Typography variant="body2">Email: support.filmrecommender@email.com</Typography>
+					<Typography variant="body2">Address: 123 Movie Lane, District 1, Ho Chi Minh City, Vietnam</Typography>
 				</Grid>
 
 				{/* Social Media Section */}
 				<Grid size={{ xs: 12, md: 4 }}>
-					<Typography variant="h6" gutterBottom>
+					<Typography variant="h6" gutterBottom fontWeight="bold">
 						Follow Us
 					</Typography>
 					<Box>
@@ -63,10 +63,12 @@ const Footer: React.FC = () => {
 				</Grid>
 			</Grid>
 
+			<Divider sx={{ my: 4 }} />
+
 			{/* Bottom Footer Section */}
 			<Box mt={4} textAlign="center">
 				<Typography variant="body2">
-					© {new Date().getFullYear()} MovieTime. All Rights Reserved.
+					© {new Date().getFullYear()} Film Recommender. All Rights Reserved.
 				</Typography>
 			</Box>
 		</Box>

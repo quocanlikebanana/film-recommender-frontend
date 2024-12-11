@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 const ContentContent: React.FC = () => {
     const { backdropOpen } = useContentContext();
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col items-stretch">
             <Backdrop
                 sx={
                     (theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })
@@ -18,7 +18,9 @@ const ContentContent: React.FC = () => {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Header />
-            <Outlet />
+            <main className='p-0 m-0'>
+                <Outlet />
+            </main>
             <Footer />
         </div>
     );

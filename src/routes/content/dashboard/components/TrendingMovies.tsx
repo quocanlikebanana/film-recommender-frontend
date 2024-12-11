@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { toTmdbImageUrl } from '../../../../app/image';
 import { Recommend as RecommendIcon } from '@mui/icons-material';
 
-export default function MovieHorizontalStack() {
+export default function TrendingMovies() {
     const [getTrendingMovies, { data, isLoading, error }] = useLazyGetTrendingMoviesQuery();
     const [timeWindow, setTimeWindow] = useState<'day' | 'week'>('day');
 
@@ -38,9 +38,9 @@ export default function MovieHorizontalStack() {
                 alignItems: 'center',
                 mb: 2,
             }}>
-                <RecommendIcon sx={{ mr: 2, fontSize: 40 }} color="primary" />
-                <Typography sx={{ mr: 4 }} variant="h4" component="h1" fontWeight="bold">
-                    Movie Trendings
+                <RecommendIcon sx={{ mr: 2, fontSize: 36 }} color="primary" />
+                <Typography sx={{ mr: 4 }} variant="h5" component="h1" fontWeight="bold">
+                    Trending Movies
                 </Typography>
                 <TrendingSwitch timeWindow={timeWindow} onSwitchChanged={setTimeWindow}>
                 </TrendingSwitch>

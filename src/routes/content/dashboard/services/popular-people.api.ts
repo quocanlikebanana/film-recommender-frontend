@@ -39,19 +39,17 @@ export type PopularPeopleResponse = Paged<PersonDetailResponse>;
 
 const dashboardApi = movieApi.injectEndpoints({
     endpoints: (builder) => ({
-        getPopularPeople: builder.query<PersonDetailResponse, PopularPeopleRequest>({
+        getPopularPeople: builder.query<PopularPeopleResponse, PopularPeopleRequest>({
             query: ({ page }) => ({
                 url: `3/person/popular`,
                 method: 'GET',
                 params: { page },
             }),
         }),
-
-
     }),
     overrideExisting: true,
 });
 
 export const {
-    useLazyGetPopularPeopleQuery,
+    useGetPopularPeopleQuery,
 } = dashboardApi;
