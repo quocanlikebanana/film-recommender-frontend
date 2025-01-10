@@ -4,3 +4,4 @@ export type Paged<T> = {
     total_pages: number;
     total_results: number;
 }
+

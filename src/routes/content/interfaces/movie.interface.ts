@@ -16,11 +16,18 @@ interface ProductionCountry {
     name: string;
 }
 
-interface SpokenLanguage {
+export interface SpokenLanguage {
     english_name: string;
     iso_639_1: string;
     name: string;
 }
+
+export interface Country {
+    english_name: string;
+    iso_3166_1: string;
+    name: string;
+}
+
 
 export interface MovieDetailResponse {
     adult: boolean;

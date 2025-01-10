@@ -1,18 +1,18 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { tmdbConfig } from '../../../app/env';
-import { MovieDetailResponse } from '../interfaces/movie.interface'
+import { Country, MovieDetailResponse, SpokenLanguage } from '../interfaces/movie.interface'
 import { Paged } from '../interfaces/common.type';
 
 const movieApiReducerPath = 'movieApi';
 
 export type SearchMoviesMovieRequest = {
-    query: string; 
-    include_adult?: boolean; 
-    language?: string; 
-    primary_release_year?: string; 
-    page: number; 
-    region?: string; 
-    year?: string; 
+    query: string;
+    include_adult?: boolean;
+    language?: string;
+    primary_release_year?: string;
+    page: number;
+    region?: string;
+    year?: string;
 }
 
 export type SearchMoviesResponse = Paged<MovieDetailResponse>;
@@ -56,6 +56,27 @@ const movieApi = createApi({
             }),
         }),
 
+        getLanguage: builder.query<SpokenLanguage[], object>({
+            query: () => ({
+                url: `3/configuration/languages`,
+                method: 'GET',
+            }),
+        }),
+
+        getCountry: builder.query<Country[], object>({
+            query: () => ({
+                url: `3/configuration/countries`,
+                method: 'GET',
+            }),
+        }),
+
+        getPrimaryTranslations: builder.query<string[], object>({
+            query: () => ({
+                url: `3/configuration/primary_translations`,
+                method: 'GET',
+            }),
+        }),
+
         searchMovies: builder.query<SearchMoviesResponse, SearchMoviesMovieRequest>({
             query: (params) => {
                 const queryString = new URLSearchParams({
@@ -81,6 +102,9 @@ const movieApi = createApi({
 export const {
     useGetMovieDetailQuery,
     useSearchMoviesQuery,
+    useGetLanguageQuery,
+    useGetCountryQuery,
+    useGetPrimaryTranslationsQuery,
 } = movieApi;
 
 export default movieApi;
