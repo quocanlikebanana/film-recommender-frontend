@@ -1,6 +1,6 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { tmdbConfig } from '../../../app/env';
-import { Country, MovieDetailResponse, Review, SpokenLanguage } from '../interfaces/movie.interface'
+import { Cast, Country, MovieDetailResponse, Review, SpokenLanguage } from '../interfaces/movie.interface'
 import { Paged } from '../interfaces/common.type';
 
 const movieApiReducerPath = 'movieApi';
@@ -17,6 +17,10 @@ export type SearchMoviesMovieRequest = {
 
 export type ListMoviesResponse = Paged<MovieDetailResponse>;
 export type ListReviewsResponse = Paged<Review>;
+export type ListCastResponse = {
+    id: number;
+    cast: Cast[];
+};
 
 
 const customQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
@@ -132,6 +136,27 @@ const movieApi = createApi({
                 },
             }),
         }),
+
+        getMovieCast: builder.query<ListCastResponse, { movieId: string }>({
+            query: ({ movieId }) => ({
+                url: `3/movie/${movieId}/credits`,
+                method: 'GET',
+                params: {
+                    language: 'en-US',
+                },
+            }),
+        }),
+
+        getCastDetail: builder.query<Cast, { personId: string }>({
+            query: ({ personId }) => ({
+                url: `3/person/${personId}`,
+                method: 'GET',
+                params: {
+                    language: 'en-US',
+                },
+            }),
+        }),
+
     }),
 });
 
@@ -145,6 +170,8 @@ export const {
     useGetUpcomingMoviesQuery,
     useGetMovieReviewsQuery,
     useGetSimilarMoviesQuery,
+    useGetMovieCastQuery,
+    useGetCastDetailQuery,
 } = movieApi;
 
 export default movieApi;
