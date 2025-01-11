@@ -5,7 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import {
   SearchMoviesMovieRequest,
   useGetPrimaryTranslationsQuery,
-} from "../../services/movieApi";
+} from "../../services/movie.api";
 
 interface LangInputProps {
   onFilterChange: (

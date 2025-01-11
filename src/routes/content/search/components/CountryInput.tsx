@@ -5,7 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import {
   SearchMoviesMovieRequest,
   useGetCountryQuery,
-} from "../../services/movieApi";
+} from "../../services/movie.api";
 import { Country } from "../../interfaces/movie.interface";
 
 interface CountryInputProps {

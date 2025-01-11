@@ -1,5 +1,5 @@
 import { Paged } from "../../interfaces/common.type";
-import movieApi from "../../services/movieApi";
+import movieApi from "../../services/movie.api";
 
 export type TrendingMovieRequest = {
     timeWindow: 'day' | 'week';

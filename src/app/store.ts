@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from '../stores/authSlice';
 import authApi from '../routes/auth/services/authApi';
 import protectedApi from '../routes/content/services/protectedApi';
-import movieApi from '../routes/content/services/movieApi';
+import movieApi from '../routes/content/services/movie.api';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 

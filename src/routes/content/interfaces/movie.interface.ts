@@ -58,4 +58,22 @@ export interface MovieDetailResponse {
     vote_count: number;
 }
 
+interface ReviewAuthorDetails {
+    name: string | null;
+    username: string;
+    avatar_path: string | null;
+    rating: number;
+}
+
+export interface Review {
+    author: string;
+    author_details: ReviewAuthorDetails;
+    content: string;
+    created_at: string;
+    id: string;
+    updated_at: string;
+    url: string;
+}
+
+
 

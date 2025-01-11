@@ -1,6 +1,6 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { tmdbConfig } from '../../../app/env';
-import { Country, MovieDetailResponse, SpokenLanguage } from '../interfaces/movie.interface'
+import { Country, MovieDetailResponse, Review, SpokenLanguage } from '../interfaces/movie.interface'
 import { Paged } from '../interfaces/common.type';
 
 const movieApiReducerPath = 'movieApi';
@@ -15,7 +15,8 @@ export type SearchMoviesMovieRequest = {
     year?: string;
 }
 
-export type SearchMoviesResponse = Paged<MovieDetailResponse>;
+export type ListMoviesResponse = Paged<MovieDetailResponse>;
+export type ListReviewsResponse = Paged<Review>;
 
 
 const customQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
@@ -77,7 +78,21 @@ const movieApi = createApi({
             }),
         }),
 
-        searchMovies: builder.query<SearchMoviesResponse, SearchMoviesMovieRequest>({
+        getPopularMovies: builder.query<ListMoviesResponse, { page: number }>({
+            query: ({ page }) => ({
+                url: `3/movie/popular?page=${page}`,
+                method: 'GET',
+            }),
+        }),
+
+        getUpcomingMovies: builder.query<ListMoviesResponse, { page: number }>({
+            query: ({ page }) => ({
+                url: `3/movie/upcoming?page=${page}`,
+                method: 'GET',
+            }),
+        }),
+
+        searchMovies: builder.query<ListMoviesResponse, SearchMoviesMovieRequest>({
             query: (params) => {
                 const queryString = new URLSearchParams({
                     query: params.query,
@@ -96,6 +111,27 @@ const movieApi = createApi({
             },
         }),
 
+        getMovieReviews: builder.query<ListReviewsResponse, { movieId: string; page: number }>({
+            query: ({ movieId, page }) => ({
+                url: `3/movie/${movieId}/reviews`,
+                method: 'GET',
+                params: {
+                    language: 'en-US',
+                    page: page.toString(),
+                },
+            }),
+        }),
+
+        getSimilarMovies: builder.query<ListMoviesResponse, { movieId: string; page: number }>({
+            query: ({ movieId, page }) => ({
+                url: `3/movie/${movieId}/similar`,
+                method: 'GET',
+                params: {
+                    language: 'en-US',
+                    page: page.toString(),
+                },
+            }),
+        }),
     }),
 });
 
@@ -105,6 +141,10 @@ export const {
     useGetLanguageQuery,
     useGetCountryQuery,
     useGetPrimaryTranslationsQuery,
+    useGetPopularMoviesQuery,
+    useGetUpcomingMoviesQuery,
+    useGetMovieReviewsQuery,
+    useGetSimilarMoviesQuery,
 } = movieApi;
 
 export default movieApi;
