@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Box, Divider, Button, Container, Typography } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
 import LocalError from "../../components/LocalError";
