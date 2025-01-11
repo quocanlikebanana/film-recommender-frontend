@@ -12,6 +12,7 @@ import MoviePoster from "./components/MoviePoster";
 import MovieDetails from "./components/MovieDetail";
 import ProductionCompanies from "./components/ProductionCompanies";
 import SimilarMovies from "./components/SimilarMovies";
+import MovieReviews from "./components/MovieReviews";
 
 const MovieRecommenderDetail = () => {
   const { movieId } = useParams<{ movieId: string }>();
@@ -64,7 +65,7 @@ const MovieRecommenderDetail = () => {
           <ProductionCompanies companies={data?.production_companies} />
         </CardContent>
       </Card>
-
+      <MovieReviews movieId={movieId || ""} />
       <SimilarMovies movieId={movieId || ""} />
     </Container>
   );
