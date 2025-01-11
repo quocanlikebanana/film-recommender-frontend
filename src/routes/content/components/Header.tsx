@@ -19,187 +19,212 @@ import { useContentContext } from "../context/Content.hook";
 import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
-	position: "relative",
-	borderRadius: theme.shape.borderRadius,
-	backgroundColor: alpha(theme.palette.common.white, 0.15),
-	"&:hover": {
-		backgroundColor: alpha(theme.palette.common.white, 0.25),
-	},
-	marginLeft: theme.spacing(1),
-	width: "100%",
-	[theme.breakpoints.up("md")]: {
-		width: "auto",
-	},
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: theme.spacing(1),
+  width: "100%",
+  [theme.breakpoints.up("md")]: {
+    width: "auto",
+  },
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-	padding: theme.spacing(0, 2),
-	height: "100%",
-	position: "absolute",
-	pointerEvents: "none",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-	color: "inherit",
-	"& .MuiInputBase-input": {
-		padding: theme.spacing(1, 1, 1, 0),
-		paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-		transition: theme.transitions.create("width"),
-		width: "100%",
-		[theme.breakpoints.up("md")]: {
-			width: "20ch",
-		},
-	},
+  color: "inherit",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+  },
 }));
 
 const drawerWidth = 240;
 
 const Header: React.FC = () => {
-	const [drawerOpen, setDrawerOpen] = useState(false);
-	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-	const [logout] = useLogoutMutation();
-	const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
-	const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [searchString, setSearchString] = useState("");
+  const [logout] = useLogoutMutation();
+  const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
+  const navigate = useNavigate();
 
-	const toggleDrawer = (open: boolean) => () => {
-		setDrawerOpen(open);
-	};
+  const toggleDrawer = (open: boolean) => () => {
+    setDrawerOpen(open);
+  };
 
-	const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-		setAnchorElUser(event.currentTarget);
-	};
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
-	};
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
-	const handleLogout = async () => {
-		handleOpenBackdrop();
-		await logout();
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		handleCloseBackdrop();
-		handleCloseUserMenu();
-		navigate("/login");
-	}
+  const handleLogout = async () => {
+    handleOpenBackdrop();
+    await logout();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    handleCloseBackdrop();
+    handleCloseUserMenu();
+    navigate("/login");
+  };
 
-	const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-		event.preventDefault();
-		navigate("/");
-	}
+  const handleLogoClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    navigate("/");
+  };
 
-	return (
-		<AppBar position="static">
-			<Toolbar>
-				{/* Menu Icon for Smaller Screens */}
-				<Box sx={{ display: { xs: "block", md: "none" } }}>
-					<IconButton
-						edge="start"
-						color="inherit"
-						aria-label="menu"
-						onClick={toggleDrawer(true)}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}
-						sx={{
-							'& .MuiDrawer-paper': {
-								boxSizing: 'border-box',
-								width: drawerWidth
-							},
-						}}>
-						<List>
-							<ListItemButton>
-								<ListItemText primary="Now Showing" />
-							</ListItemButton>
-							<ListItemButton>
-								<ListItemText primary="Coming Soon" />
-							</ListItemButton>
-							<ListItemButton>
-								<ListItemText primary="Offers" />
-							</ListItemButton>
-						</List>
-					</Drawer>
-				</Box>
+  // Hàm tìm kiếm
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (searchString.trim()) {
+      navigate(`/movies/search`, {
+        state: { query: searchString },
+        replace: true,
+      });
+    }
+    window.location.reload();
+  };
 
-				{/* Logo */}
-				<Typography
-					variant="h6"
-					component="a"
-					href="#/"
-					onClick={handleLogoClick}
-					noWrap
-					sx={{
-						fontFamily: "fantasy",
-						fontWeight: 400,
-						textDecoration: 'none',
-						flexGrow: 1,
-						letterSpacing: '0rem',
-						display: { xs: "none", sm: "block" }
-					}}>
-					Film Recommender
-				</Typography>
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        {/* Menu Icon for Smaller Screens */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Drawer
+            anchor="left"
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
+            sx={{
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            <List>
+              <ListItemButton>
+                <ListItemText primary="Now Showing" />
+              </ListItemButton>
+              <ListItemButton>
+                <ListItemText primary="Coming Soon" />
+              </ListItemButton>
+              <ListItemButton>
+                <ListItemText primary="Offers" />
+              </ListItemButton>
+            </List>
+          </Drawer>
+        </Box>
 
-				{/* Search Bar */}
-				<Search sx={{
-					flexGrow: 1,
-					marginX: {
-						xs: '1rem',
-						md: '0'
-					}
-				}}>
-					<SearchIconWrapper>
-						<SearchIcon />
-					</SearchIconWrapper>
-					<StyledInputBase
-						placeholder="Search movies…"
-						inputProps={{ "aria-label": "search" }}
-					/>
-				</Search>
+        {/* Logo */}
+        <Typography
+          variant="h6"
+          component="a"
+          href="#/"
+          onClick={handleLogoClick}
+          noWrap
+          sx={{
+            fontFamily: "fantasy",
+            fontWeight: 400,
+            textDecoration: "none",
+            flexGrow: 1,
+            letterSpacing: "0rem",
+            display: { xs: "none", sm: "block" },
+          }}
+        >
+          Film Recommender
+        </Typography>
 
-				{/* Navigation Links for Larger Screens */}
-				<Box sx={{ display: { xs: "none", md: "flex" } }}>
-					<Button color="inherit">Now Showing</Button>
-					<Button color="inherit">Coming Soon</Button>
-					<Button color="inherit">Offers</Button>
-				</Box>
+        {/* Search Bar */}
+        <form onSubmit={handleSearch} style={{ flexGrow: 1 }}>
+          <Search
+            sx={{
+              flexGrow: 1,
+              marginX: {
+                xs: "1rem",
+                md: "0",
+              },
+            }}
+          >
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search movies…"
+              inputProps={{ "aria-label": "search" }}
+              value={searchString} // Lưu giá trị input vào state
+              onChange={(e) => setSearchString(e.target.value)} // Cập nhật state khi nhập
+            />
+          </Search>
+        </form>
 
-				{/* User Profile or Login - Signup */}
-				<Box sx={{ flexGrow: 0 }}>
-					<IconButton
-						id="user-icon-button"
-						edge="end"
-						color="inherit"
-						aria-label="account"
-						onClick={handleOpenUserMenu}>
-						<AccountCircle />
-					</IconButton>
-					<Menu
-						id="user-menu"
-						sx={{ mt: '40px' }}
-						anchorEl={anchorElUser}
-						anchorOrigin={{
-							vertical: 'top',
-							horizontal: 'right',
-						}}
-						keepMounted
-						transformOrigin={{
-							vertical: 'top',
-							horizontal: 'right',
-						}}
-						open={Boolean(anchorElUser)}
-						onClose={handleCloseUserMenu}
-					>
-						<MenuItem onClick={handleLogout}>
-							<Typography sx={{ textAlign: "left" }}>Logout</Typography>
-						</MenuItem>
-					</Menu>
-				</Box>
-			</Toolbar>
-		</AppBar>
-	);
+        {/* Navigation Links for Larger Screens */}
+        <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Button color="inherit">Now Showing</Button>
+          <Button color="inherit">Coming Soon</Button>
+          <Button color="inherit">Offers</Button>
+        </Box>
+
+        {/* User Profile or Login - Signup */}
+        <Box sx={{ flexGrow: 0 }}>
+          <IconButton
+            id="user-icon-button"
+            edge="end"
+            color="inherit"
+            aria-label="account"
+            onClick={handleOpenUserMenu}
+          >
+            <AccountCircle />
+          </IconButton>
+          <Menu
+            id="user-menu"
+            sx={{ mt: "40px" }}
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuItem onClick={handleLogout}>
+              <Typography sx={{ textAlign: "left" }}>Logout</Typography>
+            </MenuItem>
+          </Menu>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 export default Header;

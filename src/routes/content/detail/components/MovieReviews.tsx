@@ -1,37 +1,29 @@
 import React, { useState } from "react";
 import { Box, Divider, Button, Container, Typography } from "@mui/material";
-import PeopleCard, { People } from "./PeopleCard";
-import { useGetPopularPeopleQuery } from "../services/popular-people.api";
-import { toTmdbImageUrl } from "../../../../app/image";
 import StarsIcon from "@mui/icons-material/Stars";
 import LocalError from "../../components/LocalError";
+import { useGetMovieReviewsQuery } from "../../services/movie.api";
+import { Review } from "../../interfaces/movie.interface";
+import ReviewCard from "./ReviewCard";
 
-const PopularPeople: React.FC = () => {
+const MovieReviews = ({ movieId }: { movieId: string }) => {
   const [visibleCount, setVisibleCount] = useState(3);
 
   const handleSeeMore = () => {
     setVisibleCount((prevCount) => prevCount + 3);
   };
 
-  const { data, isLoading, error } = useGetPopularPeopleQuery({ page: 1 });
+  const { data, isLoading, error } = useGetMovieReviewsQuery({
+    movieId: movieId,
+    page: 1,
+  });
 
   if (error) {
     return <LocalError message="Error loading popular people!" />;
   }
   if (isLoading || !data) return null;
 
-  const peopleList: People[] = data.results.map(
-    (person) =>
-      ({
-        id: person.id,
-        name: person.name,
-        department: person.known_for_department,
-        featuredMovie: person.known_for[0].title,
-        featuredMovieId: person.known_for[0].id,
-        description: person.known_for[0].overview,
-        image: toTmdbImageUrl(person.profile_path),
-      }) as People,
-  );
+  const reviewList: Review[] = data.results.map((result) => result);
 
   return (
     <Container
@@ -56,7 +48,7 @@ const PopularPeople: React.FC = () => {
           component="h1"
           fontWeight="bold"
         >
-          Popular People
+          Review
         </Typography>
       </Box>
       <Box
@@ -68,8 +60,8 @@ const PopularPeople: React.FC = () => {
           gap: 2,
         }}
       >
-        {peopleList.slice(0, visibleCount).map((people) => (
-          <PeopleCard key={people.id} person={people} />
+        {reviewList.slice(0, visibleCount).map((review) => (
+          <ReviewCard key={review.id} review={review} />
         ))}
 
         <Divider sx={{ my: 3 }} />
@@ -86,4 +78,4 @@ const PopularPeople: React.FC = () => {
   );
 };
 
-export default PopularPeople;
+export default MovieReviews;

@@ -16,11 +16,18 @@ interface ProductionCountry {
     name: string;
 }
 
-interface SpokenLanguage {
+export interface SpokenLanguage {
     english_name: string;
     iso_639_1: string;
     name: string;
 }
+
+export interface Country {
+    english_name: string;
+    iso_3166_1: string;
+    name: string;
+}
+
 
 export interface MovieDetailResponse {
     adult: boolean;
@@ -50,3 +57,23 @@ export interface MovieDetailResponse {
     vote_average: number;
     vote_count: number;
 }
+
+interface ReviewAuthorDetails {
+    name: string | null;
+    username: string;
+    avatar_path: string | null;
+    rating: number;
+}
+
+export interface Review {
+    author: string;
+    author_details: ReviewAuthorDetails;
+    content: string;
+    created_at: string;
+    id: string;
+    updated_at: string;
+    url: string;
+}
+
+
+
