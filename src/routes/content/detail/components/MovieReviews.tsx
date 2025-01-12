@@ -62,13 +62,15 @@ const MovieReviews = ({ movieId }: { movieId: string }) => {
 
         <Divider sx={{ my: 3 }} />
 
-        <Button
-          variant="outlined"
-          onClick={handleSeeMore}
-          sx={{ display: "block", mx: "auto" }}
-        >
-          See More
-        </Button>
+        {visibleCount < data.length && (
+          <Button
+            variant="outlined"
+            onClick={handleSeeMore}
+            sx={{ display: "block", mx: "auto" }}
+          >
+            See More
+          </Button>
+        )}
       </Box>
     </Container>
   );

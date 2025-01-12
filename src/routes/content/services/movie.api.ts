@@ -122,13 +122,21 @@ const movieApi = createApi({
 
         getCastDetail: builder.query<Cast, { personId: string }>({
             query: ({ personId }) => ({
-                url: `3/person/${personId}`,
-                method: 'GET',
-                params: {
-                    language: 'en-US',
-                },
+                url: `people/${personId}`,
+                method: 'GET'
             }),
         }),
+
+        getTrendingMovies: builder.query<ListMoviesResponse, {time: 'day'| 'week', page: number }>({   
+            query: ({time, page }) => ({
+                url: `movies/trending/${time}`,
+                method: 'GET',
+                params: {
+                    page: page.toString(),
+                },
+            }),
+         }),
+
 
     }),
 });
@@ -144,6 +152,7 @@ export const {
     useGetCastDetailQuery,
     useLazySearchMoviesQuery,
     useGetLatestTrailersQuery,
+    useLazyGetTrendingMoviesQuery,
 } = movieApi;
 
 export default movieApi;

@@ -62,7 +62,7 @@ const CastPage = () => {
             {data.name}
           </Typography>
           <Stack direction="row" spacing={1} mb={2}>
-            {data.also_known_as.slice(0, 3).map((alias, index) => (
+            {data.also_known_as?.slice(0, 3).map((alias, index) => (
               <Chip key={index} label={alias} variant="outlined" />
             ))}
           </Stack>
@@ -93,7 +93,7 @@ const CastPage = () => {
           Phim nổi bật
         </Typography>
         <Grid container spacing={2}>
-          {/* Duyệt qua các phim nổi bật */}
+          {/* Duyệt qua các phim nổi bật
           {data.also_known_as.map((movie) => (
             <Grid item xs={12} sm={6} md={4} key={movie}>
               <Card sx={{ height: "100%" }}>
@@ -102,7 +102,7 @@ const CastPage = () => {
                 </CardContent>
               </Card>
             </Grid>
-          ))}
+          ))} */}
         </Grid>
       </Box>
 

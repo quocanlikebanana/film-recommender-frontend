@@ -73,10 +73,11 @@ export interface Review {
     id: string;
 }
 
-
 export interface Cast {
     adult: boolean;
     gender: number;
+    tmdb_id: number | null;
+    _id: string | null;
     id: number;
     known_for_department: string;
     name: string;
