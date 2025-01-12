@@ -33,7 +33,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
               cursor: "pointer",
             }}
           >
-            {review.updated_at}
+            {review.author_details.rating}
           </Typography>
           <Typography
             variant="body2"

@@ -69,7 +69,7 @@ const CastList = ({ movieId }: { movieId: string }) => {
           {isLoading ? (
             <></>
           ) : (
-            data?.cast.map((cast) => (
+            data?.map((cast) => (
               <div
                 className="text-center"
                 onClick={() => {

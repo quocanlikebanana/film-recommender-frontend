@@ -71,9 +71,8 @@ export interface Review {
     content: string;
     created_at: string;
     id: string;
-    updated_at: string;
-    url: string;
 }
+
 
 export interface Cast {
     adult: boolean;

@@ -82,14 +82,10 @@ const movieApi = createApi({
             },
         }),
 
-        getMovieReviews: builder.query<ListReviewsResponse, { movieId: string; page: number }>({
-            query: ({ movieId, page }) => ({
+        getMovieReviews: builder.query<Review[], { movieId: string }>({
+            query: ({ movieId }) => ({
                 url: `reviews/${movieId}`,
                 method: 'GET',
-                params: {
-                    language: 'en-US',
-                    page: page.toString(),
-                },
             }),
         }),
 
@@ -104,9 +100,9 @@ const movieApi = createApi({
             }),
         }),
 
-        getMovieCast: builder.query<ListCastResponse, { movieId: string }>({
+        getMovieCast: builder.query<Cast[], { movieId: string }>({
             query: ({ movieId }) => ({
-                url: `3/movie/${movieId}/credits`,
+                url: `/movies/cast/${movieId}`,
                 method: 'GET',
                 params: {
                     language: 'en-US',
