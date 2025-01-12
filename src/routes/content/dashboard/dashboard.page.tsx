@@ -2,8 +2,8 @@ import TrendingMovies from "./components/TrendingMovies";
 import HeroSection from "./components/HeroSection";
 import PopularPeople from "./components/PopularPeople";
 import PopularMovies from "./components/PopularMovies";
-import UpcomingMovies from "./components/UpcomingMovies";
 import ChatButton from "../../components/ChatButton";
+import Trailers from "./components/Trailers";
 
 const Dashboard = () => {
   return (
@@ -12,7 +12,7 @@ const Dashboard = () => {
       <TrendingMovies />
       <PopularMovies />
       <PopularPeople />
-      <UpcomingMovies />
+      <Trailers />
       <ChatButton />
     </div>
   );

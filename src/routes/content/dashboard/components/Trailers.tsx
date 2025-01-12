@@ -1,27 +1,17 @@
 import { Box, Container, Typography, Stack } from "@mui/material";
-import MovieCard, { MovieCardProps } from "./MovieCard";
-import { toTmdbImageUrl } from "../../../../app/image";
 import { Recommend as RecommendIcon } from "@mui/icons-material";
 import LocalError from "../../components/LocalError";
-import { useGetUpcomingMoviesQuery } from "../../services/movie.api";
+import { useGetLatestTrailersQuery } from "../../services/movie.api";
+import { Trailer } from "../../interfaces/movie.interface";
+import TrailerCard from "./TrailerCard";
 
-export default function UpcomingMovies() {
-  const { data, isLoading, error } = useGetUpcomingMoviesQuery({ page: 1 });
-
+export default function Trailers() {
+  const { data, isLoading, error } = useGetLatestTrailersQuery({ page: 1 });
   if (error) {
-    return <LocalError message="Error loading trending movies!" />;
+    return <LocalError message="Error loading latest trailer!" />;
   }
 
-  const movies = (data?.results ?? []).map(
-    (movie) =>
-      ({
-        id: movie.id.toString(),
-        poster: toTmdbImageUrl(movie.poster_path),
-        title: movie.title,
-        rating: movie.vote_average,
-        description: movie.overview,
-      }) as MovieCardProps,
-  );
+  const trailers: Trailer[] = data || [];
 
   return (
     <Container
@@ -46,7 +36,7 @@ export default function UpcomingMovies() {
           component="h1"
           fontWeight="bold"
         >
-          Upcoming Movies
+          Latest trailers
         </Typography>
       </Box>
 
@@ -70,13 +60,15 @@ export default function UpcomingMovies() {
         >
           {isLoading ? (
             <>
-              <MovieCard key="loading1" movie={null} />
-              <MovieCard key="loading2" movie={null} />
-              <MovieCard key="loading3" movie={null} />
-              <MovieCard key="loading4" movie={null} />
+              <TrailerCard key="loading1" trailer={null} />
+              <TrailerCard key="loading2" trailer={null} />
+              <TrailerCard key="loading3" trailer={null} />
+              <TrailerCard key="loading4" trailer={null} />
             </>
           ) : (
-            movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+            trailers.map((trailer) => (
+              <TrailerCard key={trailer.id} trailer={trailer} />
+            ))
           )}
         </Stack>
       </Box>

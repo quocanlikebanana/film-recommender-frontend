@@ -30,7 +30,8 @@ const dashboardApi = movieApi.injectEndpoints({
     endpoints: (builder) => ({
         getTrendingMovies: builder.query<TrendingMovieResponse, TrendingMovieRequest>({
             query: ({ timeWindow, page }) => ({
-                url: `3/trending/movie/${timeWindow}`,
+                // url: `3/trending/movie/${timeWindow}`,
+                url: `movies/trending/${timeWindow}`,
                 method: 'GET',
                 params: { page },
             }),

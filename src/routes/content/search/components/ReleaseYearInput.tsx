@@ -19,7 +19,7 @@ const ReleaseYearInput: React.FC<ReleaseYearInputProps> = ({
         type="number"
         label="Release Year"
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          onFilterChange("primary_release_year")(event.target.value);
+          onFilterChange("year")(event.target.value);
         }}
       />
     </div>

@@ -1,6 +1,6 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { tmdbConfig } from '../../../app/env';
-import { Cast, Country, MovieDetailResponse, Review, SpokenLanguage } from '../interfaces/movie.interface'
+import { backendURL } from '../../../app/env';
+import { Cast, MovieDetailResponse, Review, Trailer } from '../interfaces/movie.interface'
 import { Paged } from '../interfaces/common.type';
 
 const movieApiReducerPath = 'movieApi';
@@ -22,29 +22,14 @@ export type ListCastResponse = {
     cast: Cast[];
 };
 
-
 const customQuery = async (args: string | FetchArgs, api: BaseQueryApi, extraOptions: object) => {
-    args = appendQueryStringParam(args, "api_key", tmdbConfig.apiKey);
-
     return await fetchBaseQuery({
-        baseUrl: tmdbConfig.apiUrl,
+        baseUrl: backendURL,
         prepareHeaders: (headers) => {
             headers.set('accept', 'application/json');
             return headers;
         },
     })(args, api, extraOptions);
-}
-
-function appendQueryStringParam(args: string | FetchArgs, key: string, value: string): string | FetchArgs {
-    let urlEnd = typeof args === 'string' ? args : args.url;
-    if (urlEnd.indexOf('?') < 0) {
-        urlEnd += '?';
-    }
-    else {
-        urlEnd += '&';
-    }
-    urlEnd += `${key}=${value}`;
-    return typeof args === 'string' ? urlEnd : { ...args, url: urlEnd };
 }
 
 const movieApi = createApi({
@@ -53,7 +38,7 @@ const movieApi = createApi({
     endpoints: (builder) => ({
         getMovieDetail: builder.query<MovieDetailResponse, { movieId: string }>({
             query: ({ movieId }) => ({
-                url: `3/movie/${movieId}`,
+                url: `movies/${movieId}`,
                 method: 'GET',
                 params: {
                     language: 'en-US',
@@ -61,30 +46,9 @@ const movieApi = createApi({
             }),
         }),
 
-        getLanguage: builder.query<SpokenLanguage[], object>({
-            query: () => ({
-                url: `3/configuration/languages`,
-                method: 'GET',
-            }),
-        }),
-
-        getCountry: builder.query<Country[], object>({
-            query: () => ({
-                url: `3/configuration/countries`,
-                method: 'GET',
-            }),
-        }),
-
-        getPrimaryTranslations: builder.query<string[], object>({
-            query: () => ({
-                url: `3/configuration/primary_translations`,
-                method: 'GET',
-            }),
-        }),
-
         getPopularMovies: builder.query<ListMoviesResponse, { page: number }>({
             query: ({ page }) => ({
-                url: `3/movie/popular?page=${page}`,
+                url: `movies/popular?page=${page}`,
                 method: 'GET',
             }),
         }),
@@ -98,7 +62,7 @@ const movieApi = createApi({
 
         searchMovies: builder.query<ListMoviesResponse, SearchMoviesMovieRequest>({
             query: (params) => {
-                const queryString = new URLSearchParams({
+                const paramsQuery = {
                     query: params.query,
                     include_adult: params.include_adult?.toString() || 'false',
                     language: params.language || 'en-US',
@@ -106,10 +70,13 @@ const movieApi = createApi({
                     page: params.page?.toString() || '1',
                     region: params.region || '',
                     year: params.year || '',
-                }).toString();
-
+                }
+                const filteredParams = Object.fromEntries(
+                    Object.entries(paramsQuery).filter(([, value]) => value !== '')
+                );
+                const queryString = new URLSearchParams(filteredParams).toString();
                 return {
-                    url: `3/search/movie?${queryString}`,
+                    url: `movies/search?${queryString}`,
                     method: 'GET',
                 };
             },
@@ -117,7 +84,7 @@ const movieApi = createApi({
 
         getMovieReviews: builder.query<ListReviewsResponse, { movieId: string; page: number }>({
             query: ({ movieId, page }) => ({
-                url: `3/movie/${movieId}/reviews`,
+                url: `reviews/${movieId}`,
                 method: 'GET',
                 params: {
                     language: 'en-US',
@@ -147,6 +114,16 @@ const movieApi = createApi({
             }),
         }),
 
+        getLatestTrailers: builder.query<Trailer[], { page: number }>({
+            query: ({ page }) => ({
+                url: `movies/latest-trailers`,
+                method: 'GET',
+                params: {
+                    page: page.toString(),
+                },
+            }),
+        }),
+
         getCastDetail: builder.query<Cast, { personId: string }>({
             query: ({ personId }) => ({
                 url: `3/person/${personId}`,
@@ -163,15 +140,14 @@ const movieApi = createApi({
 export const {
     useGetMovieDetailQuery,
     useSearchMoviesQuery,
-    useGetLanguageQuery,
-    useGetCountryQuery,
-    useGetPrimaryTranslationsQuery,
     useGetPopularMoviesQuery,
     useGetUpcomingMoviesQuery,
     useGetMovieReviewsQuery,
     useGetSimilarMoviesQuery,
     useGetMovieCastQuery,
     useGetCastDetailQuery,
+    useLazySearchMoviesQuery,
+    useGetLatestTrailersQuery,
 } = movieApi;
 
 export default movieApi;

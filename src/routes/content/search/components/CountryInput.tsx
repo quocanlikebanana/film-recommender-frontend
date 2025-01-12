@@ -2,11 +2,9 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import {
-  SearchMoviesMovieRequest,
-  useGetCountryQuery,
-} from "../../services/movie.api";
+import { SearchMoviesMovieRequest } from "../../services/movie.api";
 import { Country } from "../../interfaces/movie.interface";
+import { useGetCountryQuery } from "../../services/tmdp.api";
 
 interface CountryInputProps {
   onFilterChange: (

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
-  useSearchMoviesQuery,
   SearchMoviesMovieRequest,
+  useLazySearchMoviesQuery,
 } from "../services/movie.api";
 import { Alert, CircularProgress, Container, Typography } from "@mui/material";
 import useInfiniteScroll from "./hook/infiniteScroll";
@@ -22,8 +22,8 @@ export default function SearchPage() {
   const [movies, setMovies] = useState<MovieDetailResponse[]>([]);
   const [tempFilters, setTempFilters] = useState({ ...filters });
 
-  useInfiniteScroll(updatePageIndex, 200);
-  const { data, error, isLoading } = useSearchMoviesQuery(filters);
+  const { doneFetching } = useInfiniteScroll(updatePageIndex, 200);
+  const [searchMovie, { data, error, isLoading }] = useLazySearchMoviesQuery();
 
   function updatePageIndex() {
     setFilters((prevFilters) => ({
@@ -35,8 +35,13 @@ export default function SearchPage() {
   useEffect(() => {
     if (data?.results) {
       setMovies((prevMovies) => [...prevMovies, ...data.results]);
+      doneFetching(); // Reset trạng thái sau khi dữ liệu đã được thêm vào
     }
   }, [data]);
+
+  useEffect(() => {
+    searchMovie(filters);
+  }, [filters]);
 
   const handleTempFilterChange =
     (key: keyof typeof tempFilters) => (value: string) => {
@@ -46,9 +51,23 @@ export default function SearchPage() {
       }));
     };
 
+  const compareFilters = (
+    a: SearchMoviesMovieRequest,
+    b: SearchMoviesMovieRequest,
+  ) => {
+    return (
+      a.query === b.query &&
+      a.language === b.language &&
+      a.region === b.region &&
+      a.year === b.year
+    );
+  };
+
   const handleApplyFilters = () => {
-    setFilters(tempFilters);
-    setMovies([]); // Reset movies khi áp dụng bộ lọc mới
+    if (!compareFilters(filters, tempFilters)) {
+      setMovies([]);
+    }
+    setFilters({ ...tempFilters, page: 1 });
   };
 
   return (
