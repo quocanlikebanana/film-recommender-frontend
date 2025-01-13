@@ -84,7 +84,7 @@ const movieApi = createApi({
 
         getMovieReviews: builder.query<Review[], { movieId: string }>({
             query: ({ movieId }) => ({
-                url: `reviews/${movieId}`,
+                url: `movies/reviews/${movieId}`,
                 method: 'GET',
             }),
         }),
@@ -99,6 +99,8 @@ const movieApi = createApi({
                 },
             }),
         }),
+
+        
 
         getMovieCast: builder.query<Cast[], { movieId: string }>({
             query: ({ movieId }) => ({
@@ -137,6 +139,36 @@ const movieApi = createApi({
             }),
          }),
 
+        getActingList: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
+            query: ({personId, page }) => ({
+                url: `people/acting/${personId}`,
+                method: 'GET',
+                params: {
+                    page: page.toString(),
+                },
+            }),
+        }),
+
+
+        rating: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
+            query: ({personId, page }) => ({
+                url: `people/acting/${personId}`,
+                method: 'GET',
+                params: {
+                    page: page.toString(),
+                },
+            }),
+        }),
+
+        addFavorite: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
+            query: ({personId, page }) => ({
+                url: `people/acting/${personId}`,
+                method: 'GET',
+                params: {
+                    page: page.toString(),
+                },
+            }),
+        }),
 
     }),
 });
@@ -152,6 +184,7 @@ export const {
     useGetCastDetailQuery,
     useLazySearchMoviesQuery,
     useGetLatestTrailersQuery,
+    useGetActingListQuery,
     useLazyGetTrendingMoviesQuery,
 } = movieApi;
 

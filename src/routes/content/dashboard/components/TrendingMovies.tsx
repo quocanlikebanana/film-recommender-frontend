@@ -19,7 +19,6 @@ export default function TrendingMovies() {
         return <LocalError message="Error loading trending movies!" />;
     }
 
-
     const movies = (data?.results ?? []).map((movie) => ({
         id: movie.id.toString(),
         poster: toTmdbImageUrl(movie.poster_path),

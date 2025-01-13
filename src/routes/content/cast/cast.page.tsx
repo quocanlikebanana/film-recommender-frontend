@@ -15,13 +15,28 @@ import {
 } from "@mui/material";
 
 import { motion } from "framer-motion";
-import { useGetCastDetailQuery } from "../services/movie.api";
+import { useGetActingListQuery, useGetCastDetailQuery } from "../services/movie.api";
+import MovieCard, { MovieCardProps } from "../dashboard/components/MovieCard";
+import { toTmdbImageUrl } from "../../../app/image";
 
 const CastPage = () => {
   const { castId } = useParams<{ castId: string }>();
   const { data, error, isLoading } = useGetCastDetailQuery({
     personId: castId || "",
   });
+
+  const actingListRsp = useGetActingListQuery({
+    personId: castId || "",
+    page: 1,
+  });
+
+  const movies = (actingListRsp.data ?? []).map((movie) => ({
+          id: movie.id.toString(),
+          poster: toTmdbImageUrl(movie.poster_path),
+          title: movie.title,
+          rating: movie.vote_average,
+          description: movie.overview,
+      }) as MovieCardProps);
 
   if (isLoading) {
     return (
@@ -88,23 +103,20 @@ const CastPage = () => {
         </CardContent>
       </Card>
 
-      <Box mt={4}>
-        <Typography variant="h5" gutterBottom>
-          Phim nổi bật
-        </Typography>
-        <Grid container spacing={2}>
-          {/* Duyệt qua các phim nổi bật
-          {data.also_known_as.map((movie) => (
-            <Grid item xs={12} sm={6} md={4} key={movie}>
-              <Card sx={{ height: "100%" }}>
-                <CardContent>
-                  <Typography variant="h6">{movie}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))} */}
-        </Grid>
-      </Box>
+     {movies.length > 0 && (
+       <Box mt={4}>
+       <Typography variant="h5" gutterBottom>
+         Acting List
+       </Typography>
+       <Grid container spacing={2}>
+         {movies.map((movie) => (
+           <Grid item xs={12} sm={6} md={4} key={movie.id}>
+             <MovieCard key={movie.id} movie={movie} />
+           </Grid>
+         ))}
+       </Grid>
+     </Box>
+     )}
 
       <Box mt={4} sx={{ textAlign: "center" }}>
         {data.homepage && (
