@@ -1,11 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLazyGetLLMMoviesQuery } from "../content/services/movie.api";
+import {
+  useLazyGetLLMiNavigateQuery,
+  useLazyGetLLMMoviesQuery,
+} from "../content/services/movie.api";
 import MovieCard from "../content/dashboard/components/MovieCard";
 import { toTmdbImageUrl } from "../../app/image";
 
 const ChatButton: React.FC = () => {
   const [isChatboxOpen, setChatboxOpen] = useState(false);
   const [getLLMMovie, { data, error, isLoading }] = useLazyGetLLMMoviesQuery();
+  const [getLLMNavigate, navigateRsp] = useLazyGetLLMiNavigateQuery();
   const [messages, setMessages] = useState<
     { sender: string; message: React.ReactNode }[]
   >([]);
@@ -30,15 +34,28 @@ const ChatButton: React.FC = () => {
     }
   };
 
-  const handleKeyUp = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
-      sendMessage();
+  const sendNavigate = () => {
+    if (userInputRef.current) {
+      const userMessage = userInputRef.current.value.trim();
+      if (userMessage) {
+        setMessages([
+          ...messages,
+          { sender: "user", message: <p>{userMessage}</p> },
+        ]);
+        respondToUserNavigate(userMessage);
+        userInputRef.current.value = "";
+      }
     }
   };
 
   const respondToUser = (userMessage: string) => {
     setShouldFetch(true); // Bật cờ khi người dùng gửi tin nhắn
     getLLMMovie({ query: userMessage, page: 1, limit: 10 });
+  };
+
+  const respondToUserNavigate = (userMessage: string) => {
+    setShouldFetch(true); // Bật cờ khi người dùng gửi tin nhắn
+    getLLMNavigate({ query: userMessage });
   };
 
   useEffect(() => {
@@ -95,6 +112,51 @@ const ChatButton: React.FC = () => {
       }
     }
   }, [data, error, isLoading, shouldFetch]);
+
+  useEffect(() => {
+    if (shouldFetch) {
+      // Chỉ gọi API khi cờ được bật
+      if (isLoading) {
+        setMessages((prevMessages) => {
+          const loadingMessageExists = prevMessages.some(
+            (msg) => msg.message === "Đang tải dữ liệu...",
+          );
+          if (!loadingMessageExists) {
+            return [
+              ...prevMessages,
+              { sender: "bot", message: "Đang tải dữ liệu..." },
+            ];
+          }
+          return prevMessages;
+        });
+      } else {
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
+        );
+
+        if (error) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
+          ]);
+        } else if (data?.results.length !== 0) {
+          // const aiMss = data?.results.map((movie) => ({
+          //   sender: "bot",
+          //   message: <div></div>,
+          // }));
+          // if (aiMss == undefined || aiMss.length == 0) {
+          //   setMessages((prevMessages) => [
+          //     ...prevMessages,
+          //     { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
+          //   ]);
+          // } else {
+          //   setMessages((prevMessages) => [...prevMessages, ...aiMss]);
+          // }
+        }
+        setShouldFetch(false); // Tắt cờ sau khi xử lý xong
+      }
+    }
+  }, [navigateRsp, shouldFetch]);
 
   return (
     <div className="z-50 ">
@@ -170,7 +232,6 @@ const ChatButton: React.FC = () => {
               type="text"
               placeholder="Type a message"
               className="w-full px-3 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              onKeyUp={handleKeyUp}
             />
             <button
               onClick={sendMessage}
@@ -178,8 +239,10 @@ const ChatButton: React.FC = () => {
             >
               Send
             </button>
-
-            <button className="bg-emerald-400 ms-2 text-black px-4 py-2 rounded-r-md hover:bg-emerald-600 transition duration-300">
+            <button
+              onClick={sendNavigate}
+              className="bg-emerald-400 ms-2 text-black px-4 py-2 rounded-r-md hover:bg-emerald-600 transition duration-300"
+            >
               Navigate
             </button>
           </div>

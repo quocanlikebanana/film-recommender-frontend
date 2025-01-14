@@ -16,6 +16,13 @@ interface ProductionCountry {
     name: string;
 }
 
+export interface UserTracking {
+    is_favorite: boolean;
+    is_watchlist: boolean;
+    is_rated: boolean;
+    score_rated: number;
+}
+
 export interface SpokenLanguage {
     english_name: string;
     iso_639_1: string;

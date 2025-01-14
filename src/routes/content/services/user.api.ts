@@ -69,12 +69,21 @@ const userApi = protectedApi.injectEndpoints({
             })
         }),
 
-        getUsserRating: builder.query<{ rating: number }[], { movieId: string | number }>({
-            query: ({ movieId }) => ({
-                url: `users/rating/${movieId}`,
+        getUserRatingQuery: builder.query<MovieDetailResponse[], void>({
+            query: () => ({
+                url: `users/rating`,
                 method: 'GET',
             })
         }),
+
+
+        getTracking: builder.query<MovieDetailResponse[], { movieId: string | number }>({
+            query: ({ movieId }) => ({
+                url: `users/movie/${movieId}`,
+                method: 'GET',
+            })
+        }),
+
 
     }),
     overrideExisting: true,
@@ -91,5 +100,5 @@ export const {
     useGetUserHistoryQuery,
     useGetUserFavoriteQuery,
     useGetUserWatchListQuery,
-    useGetUsserRatingQuery,
+    useGetUserRatingQueryQuery,
 } = userApi;
