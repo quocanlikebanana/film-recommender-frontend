@@ -1,4 +1,4 @@
-import { MovieDetailResponse } from "../interfaces/movie.interface";
+import { MovieDetailResponse, UserTracking } from "../interfaces/movie.interface";
 import protectedApi from "./protectedApi";
 
 const userApi = protectedApi.injectEndpoints({
@@ -77,14 +77,12 @@ const userApi = protectedApi.injectEndpoints({
         }),
 
 
-        getTracking: builder.query<MovieDetailResponse[], { movieId: string | number }>({
+        getTracking: builder.query<UserTracking, { movieId: string | number }>({
             query: ({ movieId }) => ({
                 url: `users/movie/${movieId}`,
                 method: 'GET',
             })
         }),
-
-
     }),
     overrideExisting: true,
 });
