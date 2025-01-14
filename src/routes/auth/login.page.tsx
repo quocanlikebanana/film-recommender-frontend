@@ -10,6 +10,8 @@ import { selectIsAuth } from '../../stores/authSlice';
 import { toErrorMessage } from '../../error/fetchBaseQuery.error';
 import GoogleLogin from './components/GoogleLogin';
 import axios from 'axios';
+import { backendURL } from '../../app/env';
+
 
 const formSchema = z.object({
 	email: z.string().email('Invalid email'),
@@ -62,7 +64,7 @@ const LoginPage: React.FC = () => {
 	async function handleReset(): Promise<void> {
 		try {
 			const email = (document.getElementById('resetEmail') as HTMLInputElement).value;
-			const response = await axios.post('http://localhost:3000/api/auth/resetPassword', {
+			const response = await axios.post(backendURL + '/api/auth/resetPassword', {
 				email: email
 			});
 			setDialogText('An email has been sent to your email address. Please check your email to reset your password');

@@ -8,13 +8,15 @@ import LocalStorageService from '../../../services/localstorage.service';
 import PopularMovies from "./components/PopularMovies";
 import ChatButton from "../../components/ChatButton";
 import Trailers from "./components/Trailers";
+import { backendURL } from '../../../app/env';
+
 
 const Dashboard = () => {
 	const [isVerify, setIsVerify] = React.useState(false);
 
 	async function isVerified() {
 		console.log('FE token', LocalStorageService.getAccessToken());
-		const res = await axios.get('http://localhost:3000/api/auth/isVerify', {
+		const res = await axios.get(backendURL + '/api/auth/isVerify', {
 			headers: {
 				Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
 			}
@@ -29,7 +31,7 @@ const Dashboard = () => {
 	}, []);
 
 	async function resendVerifyEmail() {
-		await axios.get('http://localhost:3000/api/auth/verify');
+		await axios.get(backendURL + '/api/auth/verify');
 
 	}
 
