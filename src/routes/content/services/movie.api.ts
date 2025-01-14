@@ -89,18 +89,14 @@ const movieApi = createApi({
             }),
         }),
 
-        getSimilarMovies: builder.query<ListMoviesResponse, { movieId: string; page: number }>({
-            query: ({ movieId, page }) => ({
-                url: `3/movie/${movieId}/similar`,
+        getSimilarMovies: builder.query<MovieDetailResponse[], { movieId: string }>({
+            query: ({ movieId }) => ({
+                url: `llm/similar/${movieId}`,
                 method: 'GET',
-                params: {
-                    language: 'en-US',
-                    page: page.toString(),
-                },
             }),
         }),
 
-        
+
 
         getMovieCast: builder.query<Cast[], { movieId: string }>({
             query: ({ movieId }) => ({
@@ -129,18 +125,18 @@ const movieApi = createApi({
             }),
         }),
 
-        getTrendingMovies: builder.query<ListMoviesResponse, {time: 'day'| 'week', page: number }>({   
-            query: ({time, page }) => ({
+        getTrendingMovies: builder.query<ListMoviesResponse, { time: 'day' | 'week', page: number }>({
+            query: ({ time, page }) => ({
                 url: `movies/trending/${time}`,
                 method: 'GET',
                 params: {
                     page: page.toString(),
                 },
             }),
-         }),
+        }),
 
         getActingList: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
-            query: ({personId, page }) => ({
+            query: ({ personId, page }) => ({
                 url: `people/acting/${personId}`,
                 method: 'GET',
                 params: {
@@ -151,7 +147,7 @@ const movieApi = createApi({
 
 
         rating: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
-            query: ({personId, page }) => ({
+            query: ({ personId, page }) => ({
                 url: `people/acting/${personId}`,
                 method: 'GET',
                 params: {
@@ -161,7 +157,7 @@ const movieApi = createApi({
         }),
 
         addFavorite: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
-            query: ({personId, page }) => ({
+            query: ({ personId, page }) => ({
                 url: `people/acting/${personId}`,
                 method: 'GET',
                 params: {
@@ -169,6 +165,10 @@ const movieApi = createApi({
                 },
             }),
         }),
+
+
+
+
 
     }),
 });
