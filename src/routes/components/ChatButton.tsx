@@ -139,19 +139,23 @@ const ChatButton: React.FC = () => {
             ...prevMessages,
             { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
           ]);
-        } else if (data?.results.length !== 0) {
-          // const aiMss = data?.results.map((movie) => ({
-          //   sender: "bot",
-          //   message: <div></div>,
-          // }));
-          // if (aiMss == undefined || aiMss.length == 0) {
-          //   setMessages((prevMessages) => [
-          //     ...prevMessages,
-          //     { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
-          //   ]);
-          // } else {
-          //   setMessages((prevMessages) => [...prevMessages, ...aiMss]);
-          // }
+        } else {
+          console.log(navigateRsp.data);
+          if (
+            navigateRsp.data == undefined ||
+            navigateRsp.data == null ||
+            navigateRsp.data == ""
+          ) {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
+            ]);
+          } else {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { sender: "bot", message: navigateRsp.data },
+            ]);
+          }
         }
         setShouldFetch(false); // Tắt cờ sau khi xử lý xong
       }

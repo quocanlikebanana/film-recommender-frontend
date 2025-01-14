@@ -157,13 +157,13 @@ const movieApi = createApi({
         }),
 
 
-        getLLMiNavigate: builder.query<MovieDetailResponse[], { query: string }>({
+        getLLMiNavigate: builder.query<string, { query: string }>({
             query: ({ query }) => ({
                 url: `llm/navigate`,
                 method: 'POST',
                 body: {
                     query: query,
-                }
+                },
             }),
         }),
     }),
