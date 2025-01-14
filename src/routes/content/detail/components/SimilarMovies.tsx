@@ -10,14 +10,13 @@ import { useGetSimilarMoviesQuery } from "../../services/movie.api";
 export default function SimilarMovies({ movieId }: { movieId: string }) {
   const { data, isLoading, error } = useGetSimilarMoviesQuery({
     movieId: movieId,
-    page: 1,
   });
 
   if (error) {
     return <LocalError message="Error loading similar movies!" />;
   }
 
-  const movies = (data?.results ?? []).map(
+  const movies = (data ?? []).map(
     (movie) =>
       ({
         id: movie.id.toString(),
