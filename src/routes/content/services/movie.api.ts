@@ -97,6 +97,17 @@ const movieApi = createApi({
         }),
 
 
+        getLLMMovies: builder.query<ListMoviesResponse, { query: string, page: number, limit: number }>({
+            query: ({ query, page, limit }) => ({
+                url: `llm/search`,
+                method: 'GET',
+                params: {
+                    query,
+                    page: page.toString(),
+                    limit: limit.toString(),
+                },
+            }),
+        }),
 
         getMovieCast: builder.query<Cast[], { movieId: string }>({
             query: ({ movieId }) => ({
@@ -186,6 +197,7 @@ export const {
     useGetLatestTrailersQuery,
     useGetActingListQuery,
     useLazyGetTrendingMoviesQuery,
+    useLazyGetLLMMoviesQuery,
 } = movieApi;
 
 export default movieApi;

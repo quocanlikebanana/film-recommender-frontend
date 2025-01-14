@@ -1,10 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useLazyGetLLMMoviesQuery } from "../content/services/movie.api";
+import MovieCard from "../content/dashboard/components/MovieCard";
+import { toTmdbImageUrl } from "../../app/image";
 
 const ChatButton: React.FC = () => {
   const [isChatboxOpen, setChatboxOpen] = useState(false);
+  const [getLLMMovie, { data, error, isLoading }] = useLazyGetLLMMoviesQuery();
   const [messages, setMessages] = useState<
-    { sender: string; message: string }[]
+    { sender: string; message: React.ReactNode }[]
   >([]);
+  const [shouldFetch, setShouldFetch] = useState(false);
   const userInputRef = useRef<HTMLInputElement>(null);
 
   const toggleChatbox = () => {
@@ -15,7 +20,10 @@ const ChatButton: React.FC = () => {
     if (userInputRef.current) {
       const userMessage = userInputRef.current.value.trim();
       if (userMessage) {
-        setMessages([...messages, { sender: "user", message: userMessage }]);
+        setMessages([
+          ...messages,
+          { sender: "user", message: <p>{userMessage}</p> },
+        ]);
         respondToUser(userMessage);
         userInputRef.current.value = "";
       }
@@ -29,13 +37,64 @@ const ChatButton: React.FC = () => {
   };
 
   const respondToUser = (userMessage: string) => {
-    setTimeout(() => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "bot", message: "This is a response from the chatbot." },
-      ]);
-    }, 500);
+    setShouldFetch(true); // Bật cờ khi người dùng gửi tin nhắn
+    getLLMMovie({ query: userMessage, page: 1, limit: 10 });
   };
+
+  useEffect(() => {
+    if (shouldFetch) {
+      // Chỉ gọi API khi cờ được bật
+      if (isLoading) {
+        setMessages((prevMessages) => {
+          const loadingMessageExists = prevMessages.some(
+            (msg) => msg.message === "Đang tải dữ liệu...",
+          );
+          if (!loadingMessageExists) {
+            return [
+              ...prevMessages,
+              { sender: "bot", message: "Đang tải dữ liệu..." },
+            ];
+          }
+          return prevMessages;
+        });
+      } else {
+        setMessages((prevMessages) =>
+          prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
+        );
+
+        if (error) {
+          setMessages((prevMessages) => [
+            ...prevMessages,
+            { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
+          ]);
+        } else if (data?.results.length !== 0) {
+          const aiMss = data?.results.map((movie) => ({
+            sender: "bot",
+            message: (
+              <MovieCard
+                movie={{
+                  id: movie.id.toString(),
+                  poster: toTmdbImageUrl(movie.poster_path),
+                  title: movie.title,
+                  rating: movie.vote_average,
+                  description: movie.overview || "",
+                }}
+              />
+            ),
+          }));
+          if (aiMss == undefined || aiMss.length == 0) {
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
+            ]);
+          } else {
+            setMessages((prevMessages) => [...prevMessages, ...aiMss]);
+          }
+        }
+        setShouldFetch(false); // Tắt cờ sau khi xử lý xong
+      }
+    }
+  }, [data, error, isLoading, shouldFetch]);
 
   return (
     <div className="z-50 ">
@@ -93,7 +152,7 @@ const ChatButton: React.FC = () => {
                 key={index}
                 className={`mb-2 ${msg.sender === "user" ? "text-right" : ""}`}
               >
-                <p
+                <div
                   className={`rounded-lg py-2 px-4 inline-block ${
                     msg.sender === "user"
                       ? "bg-blue-500 text-white"
@@ -101,7 +160,7 @@ const ChatButton: React.FC = () => {
                   }`}
                 >
                   {msg.message}
-                </p>
+                </div>
               </div>
             ))}
           </div>
