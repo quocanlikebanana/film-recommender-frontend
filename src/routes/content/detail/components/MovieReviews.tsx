@@ -3,7 +3,6 @@ import { Box, Divider, Button, Container, Typography } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
 import LocalError from "../../components/LocalError";
 import { useGetMovieReviewsQuery } from "../../services/movie.api";
-import { Review } from "../../interfaces/movie.interface";
 import ReviewCard from "./ReviewCard";
 
 const MovieReviews = ({ movieId }: { movieId: string }) => {
@@ -15,15 +14,12 @@ const MovieReviews = ({ movieId }: { movieId: string }) => {
 
   const { data, isLoading, error } = useGetMovieReviewsQuery({
     movieId: movieId,
-    page: 1,
   });
 
   if (error) {
     return <LocalError message="Error loading popular people!" />;
   }
   if (isLoading || !data) return null;
-
-  const reviewList: Review[] = data.results.map((result) => result);
 
   return (
     <Container
@@ -60,19 +56,21 @@ const MovieReviews = ({ movieId }: { movieId: string }) => {
           gap: 2,
         }}
       >
-        {reviewList.slice(0, visibleCount).map((review) => (
+        {data.slice(0, visibleCount).map((review) => (
           <ReviewCard key={review.id} review={review} />
         ))}
 
         <Divider sx={{ my: 3 }} />
 
-        <Button
-          variant="outlined"
-          onClick={handleSeeMore}
-          sx={{ display: "block", mx: "auto" }}
-        >
-          See More
-        </Button>
+        {visibleCount < data.length && (
+          <Button
+            variant="outlined"
+            onClick={handleSeeMore}
+            sx={{ display: "block", mx: "auto" }}
+          >
+            See More
+          </Button>
+        )}
       </Box>
     </Container>
   );

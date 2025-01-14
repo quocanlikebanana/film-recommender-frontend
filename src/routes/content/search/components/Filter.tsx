@@ -1,4 +1,3 @@
-// src/components/Filter.tsx
 import React from "react";
 import { Button, Grid } from "@mui/material";
 import LangInput from "./LangInput";

@@ -38,7 +38,7 @@ const ChatButton: React.FC = () => {
   };
 
   return (
-    <div className="z-50">
+    <div className="z-50 ">
       <div className="fixed bottom-0 right-0 mb-4 mr-4">
         <button
           onClick={toggleChatbox}
@@ -58,15 +58,15 @@ const ChatButton: React.FC = () => {
               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             ></path>
           </svg>
-          Ask bot
+          Ask AI
         </button>
       </div>
       <div
-        className={`fixed bottom-16 right-4 w-96 ${isChatboxOpen ? "" : "hidden"}`}
+        className={`fixed bottom-16 right-4 w-1/2 ${isChatboxOpen ? "" : "hidden"}`}
       >
-        <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
+        <div className="bg-white shadow-md rounded-lg w-full">
           <div className="p-4 border-b bg-blue-500 text-white rounded-t-lg flex justify-between items-center">
-            <p className="text-lg font-semibold">Bot</p>
+            <p className="text-lg font-semibold">AI</p>
             <button
               onClick={toggleChatbox}
               className="text-gray-300 hover:text-gray-400 focus:outline-none"

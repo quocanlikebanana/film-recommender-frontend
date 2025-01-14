@@ -71,13 +71,13 @@ export interface Review {
     content: string;
     created_at: string;
     id: string;
-    updated_at: string;
-    url: string;
 }
 
 export interface Cast {
     adult: boolean;
     gender: number;
+    tmdb_id: number | null;
+    _id: string | null;
     id: number;
     known_for_department: string;
     name: string;
@@ -96,6 +96,21 @@ export interface Cast {
     imdb_id: string;
     place_of_birth: string;
 }
+
+export interface Trailer {
+    iso_639_1: string;       // Language code
+    iso_3166_1: string;      // Country code
+    name: string;            // Video title
+    key: string;             // YouTube video key
+    site: string;            // Video platform
+    size: number;            // Video resolution
+    type: string;            // Video type (e.g., Trailer)
+    official: boolean;       // Whether it is an official video
+    published_at: string;    // Publish date in ISO format
+    id: string;              // Unique video identifier
+    link: string;            // Direct link to the video
+}
+
 
 
 

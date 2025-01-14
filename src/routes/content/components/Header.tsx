@@ -65,6 +65,10 @@ const Header: React.FC = () => {
   const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
   const navigate = useNavigate();
 
+  const redirectToProfile = () => {
+    navigate("/profile");
+  };
+
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
@@ -217,6 +221,9 @@ const Header: React.FC = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
+            <MenuItem onClick={redirectToProfile}>
+              <Typography sx={{ textAlign: "left" }}>Profile</Typography>
+            </MenuItem>
             <MenuItem onClick={handleLogout}>
               <Typography sx={{ textAlign: "left" }}>Logout</Typography>
             </MenuItem>

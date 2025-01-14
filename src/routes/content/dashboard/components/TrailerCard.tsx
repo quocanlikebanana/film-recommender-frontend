@@ -4,27 +4,15 @@ import {
   CardContent,
   Box,
   Typography,
-  Button,
   Skeleton,
 } from "@mui/material";
-import {
-  Star as StarIcon,
-  PlayCircleOutline as PlayIcon,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Trailer } from "../../interfaces/movie.interface";
 
-export interface MovieCardProps {
-  id: string;
-  poster: string;
-  title: string;
-  rating: number;
-  description: string;
-}
+export default function TrailerCard({ trailer }: { trailer: Trailer | null }) {
+  const getYouTubeThumbnail = (videoKey: string) =>
+    `https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`;
 
-export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
-  const navigate = useNavigate();
-
-  if (!movie)
+  if (!trailer)
     return (
       <Card
         sx={{
@@ -57,11 +45,6 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
       </Card>
     );
 
-  const handleWatch = () => {
-    if (!movie) return;
-    navigate(`/movies/${movie.id}`);
-  };
-
   return (
     <Card
       sx={{
@@ -82,11 +65,17 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
     >
       <CardMedia
         component="img"
-        image={movie.poster}
-        alt={movie.title}
+        image={
+          trailer.site === "YouTube"
+            ? getYouTubeThumbnail(trailer.key)
+            : undefined
+        }
+        onClick={() => window.open(trailer.link, "_blank")}
+        alt={trailer.name}
         sx={{
-          height: "100%",
+          height: 200,
           width: "100%",
+          objectFit: "cover",
         }}
       />
       <CardContent
@@ -105,19 +94,8 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
           }}
         >
           <Typography variant="h6" component="h2">
-            {movie.title}
+            {trailer.name}
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <StarIcon color="warning" sx={{ mr: 1 }} />
-            <Typography variant="body2" color="text.secondary">
-              {movie.rating.toFixed(1)}
-            </Typography>
-          </Box>
         </Box>
         <Typography
           variant="body2"
@@ -131,16 +109,8 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
             WebkitLineClamp: 2,
           }}
         >
-          {movie.description}
+          {trailer.published_at}
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<PlayIcon />}
-          fullWidth
-          onClick={handleWatch}
-        >
-          Detail
-        </Button>
       </CardContent>
     </Card>
   );

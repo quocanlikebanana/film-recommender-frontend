@@ -17,7 +17,6 @@ import CastList from "./components/CastList";
 
 const MovieRecommenderDetail = () => {
   const { movieId } = useParams<{ movieId: string }>();
-  console.log(movieId);
   const { data, error, isLoading } = useGetMovieDetailQuery({
     movieId: movieId!,
   });
@@ -51,6 +50,7 @@ const MovieRecommenderDetail = () => {
             {/* Movie Details */}
             <Grid item xs={12} md={8}>
               <MovieDetails
+                movieId={data?.id || 0}
                 title={data?.title}
                 tagline={data?.tagline}
                 overview={data?.overview}

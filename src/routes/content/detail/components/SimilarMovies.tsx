@@ -14,7 +14,7 @@ export default function SimilarMovies({ movieId }: { movieId: string }) {
   });
 
   if (error) {
-    return <LocalError message="Error loading trending movies!" />;
+    return <LocalError message="Error loading similar movies!" />;
   }
 
   const movies = (data?.results ?? []).map(

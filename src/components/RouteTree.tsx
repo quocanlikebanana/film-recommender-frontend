@@ -65,15 +65,6 @@ const router = createBrowserRouter(
             },
           ],
         },
-        // {
-        //   element: <ContentLayout />,
-        //   children: [
-        //     {
-        //       path: "/movies/:movieId",
-        //       element: <DetailPage />,
-        //     },
-        //   ],
-        // },
       ],
     },
   ],

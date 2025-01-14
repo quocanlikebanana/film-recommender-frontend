@@ -11,8 +11,11 @@ const TrendingSwitch: React.FC<TrendingSwitchProps> = ({ timeWindow, onSwitchCha
     const handleChange = (
         _event: React.MouseEvent<HTMLElement>,
         newSelected: "day" | "week"
+        
     ) => {
-        onSwitchChanged(newSelected);
+        if (newSelected !== null) {
+            onSwitchChanged(newSelected);
+        }
     };
 
     return (

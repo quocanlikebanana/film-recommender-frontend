@@ -1,18 +1,18 @@
 import { Box, Container, Typography, Stack } from '@mui/material'
 import MovieCard, { MovieCardProps } from './MovieCard'
-import { useLazyGetTrendingMoviesQuery } from '../services/trending-movies.api'
 import TrendingSwitch from './ToggleButton';
 import { useEffect, useState } from 'react';
 import { toTmdbImageUrl } from '../../../../app/image';
 import { Recommend as RecommendIcon } from '@mui/icons-material';
 import LocalError from '../../components/LocalError';
+import { useLazyGetTrendingMoviesQuery } from '../../services/movie.api';
 
 export default function TrendingMovies() {
     const [getTrendingMovies, { data, isLoading, error }] = useLazyGetTrendingMoviesQuery();
     const [timeWindow, setTimeWindow] = useState<'day' | 'week'>('day');
 
     useEffect(() => {
-        getTrendingMovies({ timeWindow, page: 1 });
+        getTrendingMovies({ time: timeWindow, page: 1 });
     }, [timeWindow, getTrendingMovies]);
 
     if (error) {

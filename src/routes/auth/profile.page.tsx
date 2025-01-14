@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Paper, Typography, Avatar, Grid, Box } from "@mui/material";
 import FavoriteMovies from "./components/FavoriteMovies";
 import WatchList from "./components/WatchList";

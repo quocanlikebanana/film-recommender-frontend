@@ -2,10 +2,8 @@ import * as React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import {
-  SearchMoviesMovieRequest,
-  useGetPrimaryTranslationsQuery,
-} from "../../services/movie.api";
+import { SearchMoviesMovieRequest } from "../../services/movie.api";
+import { useGetPrimaryTranslationsQuery } from "../../services/tmdp.api";
 
 interface LangInputProps {
   onFilterChange: (
