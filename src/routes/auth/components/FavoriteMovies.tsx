@@ -1,20 +1,20 @@
 import { Box, Container, Typography, Stack } from "@mui/material";
 import { Recommend as RecommendIcon } from "@mui/icons-material";
-import { useGetPopularMoviesQuery } from "../../content/services/movie.api";
 import LocalError from "../../content/components/LocalError";
 import { toTmdbImageUrl } from "../../../app/image";
 import MovieCard, {
   MovieCardProps,
 } from "../../content/dashboard/components/MovieCard";
+import { useGetUserFavoriteQuery } from "../../content/services/user.api";
 
 export default function FavoriteMovies() {
-  const { data, isLoading, error } = useGetPopularMoviesQuery({ page: 1 });
+  const { data, isLoading, error } = useGetUserFavoriteQuery();
 
   if (error) {
-    return <LocalError message="Error loading trending movies!" />;
+    return <LocalError message="Error loading favorite movies!" />;
   }
 
-  const movies = (data?.results ?? []).map(
+  const movies = (data ?? []).map(
     (movie) =>
       ({
         id: movie.id.toString(),
