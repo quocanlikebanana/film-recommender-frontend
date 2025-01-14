@@ -155,6 +155,17 @@ const movieApi = createApi({
                 },
             }),
         }),
+
+
+        getLLMiNavigate: builder.query<MovieDetailResponse[], { query: string }>({
+            query: ({ query }) => ({
+                url: `llm/navigate`,
+                method: 'POST',
+                body: {
+                    query: query,
+                }
+            }),
+        }),
     }),
 });
 
@@ -172,6 +183,7 @@ export const {
     useGetActingListQuery,
     useLazyGetTrendingMoviesQuery,
     useLazyGetLLMMoviesQuery,
+    useLazyGetLLMiNavigateQuery,
 } = movieApi;
 
 export default movieApi;
