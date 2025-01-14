@@ -17,6 +17,10 @@ class LocalStorageService {
 		localStorage.setItem(this.REFRESH_TOKEN_KEY, token.refreshToken);
 	}
 
+	static setAccessToken(token: string): void {
+		localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
+	}
+
 	static clearTokens(): void {
 		localStorage.removeItem(this.ACCESS_TOKEN_KEY);
 		localStorage.removeItem(this.REFRESH_TOKEN_KEY);

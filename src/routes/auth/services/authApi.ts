@@ -11,6 +11,7 @@ interface RegisterRequest {
 	password: string;
 	firstName: string;
 	lastName: string;
+	avatarPath: string;
 }
 
 interface Token {
@@ -23,6 +24,7 @@ interface AuthResponse {
 	firstName: string;
 	lastName: string;
 	token: Token;
+	avatarPath: string;
 }
 
 const authApiReducerPath = 'authApi';

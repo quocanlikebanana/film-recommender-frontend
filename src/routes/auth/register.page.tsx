@@ -16,6 +16,7 @@ const formSchema = z.object({
 	lastName: z.string().regex(/^[A-Za-z]+$/, 'Last name must contain only letters'),
 	email: z.string().email('Invalid email provided'),
 	password: z.string().min(6, 'Password must be at least 6 characters long'),
+	avatarPath: z.string().optional(),
 });
 
 type FormFields = z.infer<typeof formSchema>;
@@ -38,7 +39,7 @@ const RegisterPage: React.FC = () => {
 
 	const onSubmit: SubmitHandler<FormFields> = async (data, e) => {
 		e?.preventDefault();
-		await register(data);
+		await register({ ...data, avatarPath: data.avatarPath ?? '' });
 	}
 
 	function handleLoginNavigate() {
@@ -149,7 +150,18 @@ const RegisterPage: React.FC = () => {
 							fullWidth
 							sx={{ mb: 2 }}
 						/>
-
+						<TextField
+							{...formRegister("avatarPath")}
+							label="Avartar Path"
+							size="small"
+							variant="outlined"
+							name="avatarPath"
+							type="text"
+							error={Boolean(errors.password != null)}
+							helperText={errors.password?.message}
+							fullWidth
+							sx={{ mb: 2 }}
+						/>
 						{/* Submit Button */}
 						<Button
 							type='submit'

@@ -17,6 +17,7 @@ import { ListItemButton, Menu, MenuItem } from "@mui/material";
 import { useLogoutMutation } from "../services/logout.api";
 import { useContentContext } from "../context/Content.hook";
 import { useNavigate } from "react-router-dom";
+import { useDeleteAccMutation } from "../services/deleteAcc.api";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -61,6 +62,7 @@ const Header: React.FC = () => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 	const [logout] = useLogoutMutation();
+	const [deleteAcc] = useDeleteAccMutation();
 	const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
 	const navigate = useNavigate();
 
@@ -79,6 +81,15 @@ const Header: React.FC = () => {
 	const handleLogout = async () => {
 		handleOpenBackdrop();
 		await logout();
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		handleCloseBackdrop();
+		handleCloseUserMenu();
+		navigate("/login");
+	}
+
+	const handleDeleteAcc = async () => {
+		handleOpenBackdrop();
+		await deleteAcc();
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		handleCloseBackdrop();
 		handleCloseUserMenu();
@@ -192,9 +203,13 @@ const Header: React.FC = () => {
 						open={Boolean(anchorElUser)}
 						onClose={handleCloseUserMenu}
 					>
+						<MenuItem onClick={handleDeleteAcc}>
+							<Typography sx={{ textAlign: "left" }}>Delete Acc</Typography>
+						</MenuItem>
 						<MenuItem onClick={handleLogout}>
 							<Typography sx={{ textAlign: "left" }}>Logout</Typography>
 						</MenuItem>
+
 					</Menu>
 				</Box>
 			</Toolbar>

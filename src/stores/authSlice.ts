@@ -3,11 +3,14 @@ import { RootState } from '../app/store.ts';
 import authApi, { AuthResponse, Token } from '../routes/auth/services/authApi.ts';
 import LocalStorageService from '../services/localstorage.service.ts';
 import logoutApi from '../routes/content/services/logout.api.ts';
+import deleteAccApi from '../routes/content/services/deleteAcc.api.ts';
+import { CleaningServices } from '@mui/icons-material';
 
 type UserSessionInfo = {
 	email: string;
 	firstName: string;
 	lastName: string;
+	avatarPath: string;
 }
 
 interface AuthState {
@@ -38,9 +41,12 @@ function setApiAuthState(state: AuthState, action: PayloadAction<AuthResponse>) 
 		email: action.payload.email,
 		firstName: action.payload.firstName,
 		lastName: action.payload.lastName,
+		avatarPath: action.payload.avatarPath,
 	};
+	//xtodo: set BE response
 	state.token = action.payload.token;
 	LocalStorageService.setTokens(action.payload.token);
+	console.log(action.payload.token);
 }
 
 const authSlice = createSlice({
@@ -82,6 +88,16 @@ const authSlice = createSlice({
 					state.token = null;
 					LocalStorageService.clearTokens();
 				})
+			.addMatcher(
+				(action) =>
+					deleteAccApi.endpoints.deleteAcc.matchFulfilled(action) ||
+					deleteAccApi.endpoints.deleteAcc.matchRejected(action),
+				(state) => {
+					state.user = null;
+					state.token = null;
+					LocalStorageService.clearTokens();
+				})
+
 	},
 });
 

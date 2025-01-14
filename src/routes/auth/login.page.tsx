@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Fade, Divider } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert, CircularProgress, Slide, Fade, Divider, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -9,7 +9,7 @@ import { useAppSelector } from '../../app/hooks';
 import { selectIsAuth } from '../../stores/authSlice';
 import { toErrorMessage } from '../../error/fetchBaseQuery.error';
 import GoogleLogin from './components/GoogleLogin';
-
+import axios from 'axios';
 
 const formSchema = z.object({
 	email: z.string().email('Invalid email'),
@@ -31,6 +31,8 @@ const LoginPage: React.FC = () => {
 	} = useForm<FormFields>({
 		resolver: zodResolver(formSchema),
 	});
+	const [open, setOpen] = React.useState(false);
+	const [DialogText, setDialogText] = React.useState('Please enter your email address to reset your password');
 
 	const errorMessage = toErrorMessage(error);
 
@@ -48,6 +50,27 @@ const LoginPage: React.FC = () => {
 			navigate('/');
 		}
 	}, [isAuth, navigate]);
+
+	function handleClickOpen(): void {
+		setOpen(true);
+	}
+
+	function handleClose(): void {
+		setOpen(false);
+	}
+
+	async function handleReset(): Promise<void> {
+		try {
+			const email = (document.getElementById('resetEmail') as HTMLInputElement).value;
+			const response = await axios.post('http://localhost:3000/api/auth/resetPassword', {
+				email: email
+			});
+			setDialogText('An email has been sent to your email address. Please check your email to reset your password');
+			console.log(response);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<Fade in>
@@ -126,6 +149,29 @@ const LoginPage: React.FC = () => {
 							sx={{ mb: 2 }}
 						/>
 
+
+						<Typography onClick={handleClickOpen}>
+							Forget password? Click here to reset
+						</Typography>
+						<Dialog onClose={handleClose} open={open}>
+							<DialogTitle>Reset Password</DialogTitle>
+							<DialogContent>
+								<DialogContentText>
+									{DialogText}
+								</DialogContentText>
+								<TextField
+									autoFocus
+									margin="dense"
+									id="resetEmail"
+									label="Email Address"
+									type="email"
+									fullWidth
+								/>
+								<Button onClick={handleReset}>Reset</Button>
+							</DialogContent>
+						</Dialog>
+
+
 						{/* Submit Button */}
 						<Button
 							type='submit'
@@ -184,5 +230,7 @@ const LoginPage: React.FC = () => {
 		</Fade>
 	);
 };
+
+
 
 export default LoginPage;
