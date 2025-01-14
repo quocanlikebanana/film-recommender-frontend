@@ -3,6 +3,11 @@ const isDevelopment = import.meta.env.DEV;
 
 const noAuth: boolean = isDevelopment && import.meta.env.VITE_NO_AUTH == "true" ? true : false;
 
+const aiConfig = {
+	apiKey: import.meta.env.VITE_AI_API_KEY,
+	baseUrl: import.meta.env.VITE_AI_BASE_URL,
+}
+
 const tmdbConfig = {
 	apiKey: import.meta.env.VITE_TMDB_API_KEY,
 	apiUrl: import.meta.env.VITE_TMDB_API_URL,
@@ -24,5 +29,6 @@ export {
 	isDevelopment,
 	noAuth,
 	firebaseConfig,
-	tmdbConfig
+	tmdbConfig,
+	aiConfig
 };
