@@ -1,13 +1,10 @@
 import TrendingMovies from './components/TrendingMovies';
 import HeroSection from './components/HeroSection';
-import PopularPeople from './components/PopularPeople';
 import axios from 'axios';
 import React from 'react';
 import { Button } from '@mui/material';
 import LocalStorageService from '../../../services/localstorage.service';
 
-import TrendingMovies from "./components/TrendingMovies";
-import HeroSection from "./components/HeroSection";
 import PopularMovies from "./components/PopularMovies";
 import ChatButton from "../../components/ChatButton";
 import Trailers from "./components/Trailers";
