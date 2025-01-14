@@ -174,9 +174,13 @@ const ChatButton: React.FC = () => {
             />
             <button
               onClick={sendMessage}
-              className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600 transition duration-300"
+              className="bg-blue-500 text-white px-4 py-2 rounded-l-md hover:bg-blue-600 transition duration-300"
             >
               Send
+            </button>
+
+            <button className="bg-emerald-400 ms-2 text-black px-4 py-2 rounded-r-md hover:bg-emerald-600 transition duration-300">
+              Navigate
             </button>
           </div>
         </div>

@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { Typography, Box, Rating, IconButton } from "@mui/material";
+import React from "react";
+import { Typography, Box, Rating, IconButton, Alert } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useAppSelector } from "../../../../app/hooks";
 import { selectAuthUser } from "../../../../stores/authSlice";
 import { useNavigate } from "react-router-dom";
+import {
+  useLazyAddFavoriteQuery,
+  useLazyAddWatchListQuery,
+} from "../../services/user.api";
 
 interface MovieDetailsProps {
-  movieId: number;
+  movieId: string | number;
   title?: string;
   tagline?: string | null;
   overview?: string | null;
@@ -18,6 +22,7 @@ interface MovieDetailsProps {
 }
 
 const MovieDetail: React.FC<MovieDetailsProps> = ({
+  movieId = "",
   title = "Unknown Title",
   tagline = "No Tagline Available",
   overview = "No Overview Available",
@@ -29,29 +34,71 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
   const user = useAppSelector(selectAuthUser);
   const navigate = useNavigate();
 
-  const handleRatingChange = (_: React.ChangeEvent<{}>, newValue: number | null) => {
+  const [addToWatchList, addToWatchListRsp] = useLazyAddWatchListQuery();
+  const [addToFavorite, addToFavoriteRsp] = useLazyAddFavoriteQuery();
+
+  const [customErr, setError] = React.useState<string | null>(null);
+  const [successMss, setSuccessMss] = React.useState<string | null>(null);
+
+  const handleRatingChange = (
+    _: React.ChangeEvent<object>,
+    newValue: number | null,
+  ) => {
     if (!user) {
       navigate("/login");
     }
-    console.log("User Rating:", newValue); 
+    console.log("User Rating:", newValue);
   };
 
   const handleAddFavorite = () => {
     if (!user) {
       navigate("/login");
     }
-    console.log("Adding to favorites");
+    addToFavorite({ movieId: movieId });
+    if (addToFavoriteRsp.error) {
+      handleErr("Error adding to favorite list");
+    } else {
+      handleSuccesss("Added to favorite list");
+    }
   };
 
   const handleAddToWatchList = () => {
     if (!user) {
       navigate("/login");
     }
-    console.log("Adding to watch list");
+    addToWatchList({ movieId: movieId });
+    if (addToWatchListRsp.error) {
+      handleErr("Error adding to watch list");
+    } else {
+      handleSuccesss("Added to watch list");
+    }
   };
 
+  const handleErr = (err: string) => {
+    setError(err);
+    setTimeout(() => {
+      setError(null);
+    }, 2000); // 2 giây
+  };
+
+  const handleSuccesss = (mss: string) => {
+    setSuccessMss(mss);
+    setTimeout(() => {
+      setSuccessMss(null);
+    }, 2000); // 2 giây
+  };
   return (
     <Box>
+      {customErr && (
+        <Alert className="fixed left-20 top-20" severity="error">
+          {customErr}
+        </Alert>
+      )}
+      {successMss && (
+        <Alert className="fixed left-20 top-20" severity="success">
+          {successMss}
+        </Alert>
+      )}
       <Typography variant="h4" gutterBottom>
         {title}
       </Typography>
@@ -82,16 +129,24 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
         {/* Rating component for user input */}
         <Rating
           name="customized-10"
-          value={user? 0 : 0}
+          value={user ? 0 : 0}
           onChange={handleRatingChange} // Update the rating when user selects a new value
           max={10}
         />
       </Box>
       <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
-        <IconButton onClick={handleAddFavorite} sx={{ cursor: "pointer" }} aria-label="add to watch list">
+        <IconButton
+          onClick={handleAddFavorite}
+          sx={{ cursor: "pointer" }}
+          aria-label="add to watch list"
+        >
           <AddCircleOutlineIcon />
         </IconButton>
-        <IconButton onClick={handleAddToWatchList} sx={{ cursor: "pointer" }} aria-label="add to favorites">
+        <IconButton
+          onClick={handleAddToWatchList}
+          sx={{ cursor: "pointer" }}
+          aria-label="add to favorites"
+        >
           <FavoriteIcon color="error" />
         </IconButton>
       </Box>

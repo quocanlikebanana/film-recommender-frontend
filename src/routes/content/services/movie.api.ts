@@ -155,32 +155,6 @@ const movieApi = createApi({
                 },
             }),
         }),
-
-
-        rating: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
-            query: ({ personId, page }) => ({
-                url: `people/acting/${personId}`,
-                method: 'GET',
-                params: {
-                    page: page.toString(),
-                },
-            }),
-        }),
-
-        addFavorite: builder.query<MovieDetailResponse[], { personId: string, page: number }>({
-            query: ({ personId, page }) => ({
-                url: `people/acting/${personId}`,
-                method: 'GET',
-                params: {
-                    page: page.toString(),
-                },
-            }),
-        }),
-
-
-
-
-
     }),
 });
 
