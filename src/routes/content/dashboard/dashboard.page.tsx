@@ -4,15 +4,18 @@ import axios from "axios";
 import React from "react";
 import { Button, CircularProgress } from "@mui/material";
 import LocalStorageService from "../../../services/localstorage.service";
-
 import PopularMovies from "./components/PopularMovies";
 import ChatButton from "../../components/ChatButton";
 import Trailers from "./components/Trailers";
 import { backendURL } from "../../../app/env";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 const Dashboard = () => {
   const [isVerify, setIsVerify] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+
+  const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
 
   async function isVerified() {
     try {
@@ -51,9 +54,12 @@ const Dashboard = () => {
     );
   }
 
+  console.log("isVerify", isVerify);
+  console.log("isAuthenticated", isAuthenticated);
+
   return (
     <>
-      {isVerify ? (
+      {isVerify || !isAuthenticated ? (
         <div className="flex flex-col">
           <HeroSection />
           <TrendingMovies />

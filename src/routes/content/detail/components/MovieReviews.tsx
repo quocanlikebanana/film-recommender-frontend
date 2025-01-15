@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Divider, Button, Container, Typography } from "@mui/material";
 import StarsIcon from "@mui/icons-material/Stars";
 import LocalError from "../../components/LocalError";
-import { useGetMovieReviewsQuery } from "../../services/movie.api";
+import { useGetMovieReviewsQuery } from "../../services/user.api";
 import ReviewCard from "./ReviewCard";
 
 const MovieReviews = ({ movieId }: { movieId: string }) => {
@@ -17,7 +17,7 @@ const MovieReviews = ({ movieId }: { movieId: string }) => {
   });
 
   if (error) {
-    return <LocalError message="Error loading popular people!" />;
+    return <LocalError message="Error loading review!" />;
   }
   if (isLoading || !data) return null;
 

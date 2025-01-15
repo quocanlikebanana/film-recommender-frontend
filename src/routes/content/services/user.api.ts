@@ -1,4 +1,4 @@
-import { MovieDetailResponse, UserTracking } from "../interfaces/movie.interface";
+import { MovieDetailResponse, Review, UserTracking } from "../interfaces/movie.interface";
 import protectedApi from "./protectedApi";
 
 const userApi = protectedApi.injectEndpoints({
@@ -11,6 +11,13 @@ const userApi = protectedApi.injectEndpoints({
                     rating: rating,
                 }
             })
+        }),
+
+        getMovieReviews: builder.query<Review[], { movieId: string }>({
+            query: ({ movieId }) => ({
+                url: `movies/reviews/${movieId}`,
+                method: 'GET',
+            }),
         }),
 
         addFavorite: builder.query<void, { movieId: string | number }>({
@@ -101,4 +108,5 @@ export const {
     useGetUserRatingQueryQuery,
     useLazyGetTrackingQuery,
     useGetTrackingQuery,
+    useGetMovieReviewsQuery,
 } = userApi;

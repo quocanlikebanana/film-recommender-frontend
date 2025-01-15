@@ -18,6 +18,8 @@ import { useLogoutMutation } from "../services/logout.api";
 import { useContentContext } from "../context/Content.hook";
 import { useNavigate } from "react-router-dom";
 import { useDeleteAccMutation } from "../services/deleteAcc.api";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/store";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -67,6 +69,8 @@ const Header: React.FC = () => {
   const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
   const navigate = useNavigate();
 
+  const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
+
   const redirectToProfile = () => {
     navigate("/profile");
   };
@@ -82,6 +86,10 @@ const Header: React.FC = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogin = () => {
+    navigate("/login");
+  }
 
   const handleLogout = async () => {
     handleOpenBackdrop();
@@ -206,44 +214,47 @@ const Header: React.FC = () => {
         </Box>
 
         {/* User Profile or Login - Signup */}
-        <Box sx={{ flexGrow: 0 }}>
-          <IconButton
-            id="user-icon-button"
-            edge="end"
-            color="inherit"
-            aria-label="account"
-            onClick={handleOpenUserMenu}
-          >
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="user-menu"
-            sx={{ mt: "40px" }}
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            <MenuItem onClick={redirectToProfile}>
-              <Typography sx={{ textAlign: "left" }}>Profile</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleDeleteAcc}>
-              <Typography sx={{ textAlign: "left" }}>Delete Acc</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleLogout}>
-              <Typography sx={{ textAlign: "left" }}>Logout</Typography>
-            </MenuItem>
-
-          </Menu>
-        </Box>
+        {isAuthenticated == false ?
+          (<Button color="inherit" onClick={handleLogin}>Login</Button>)
+          : (
+            <Box sx={{ flexGrow: 0 }}>
+              <IconButton
+                id="user-icon-button"
+                edge="end"
+                color="inherit"
+                aria-label="account"
+                onClick={handleOpenUserMenu}
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="user-menu"
+                sx={{ mt: "40px" }}
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={redirectToProfile}>
+                  <Typography sx={{ textAlign: "left" }}>Profile</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleDeleteAcc}>
+                  <Typography sx={{ textAlign: "left" }}>Delete Account</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Typography sx={{ textAlign: "left" }}>Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
       </Toolbar>
     </AppBar>
   );

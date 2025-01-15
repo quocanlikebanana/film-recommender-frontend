@@ -44,6 +44,15 @@ const router = createBrowserRouter(
           ),
           children: [
             {
+              path: "/profile",
+              element: <ProfilePage />,
+            },
+          ],
+        },
+        {
+          element: <ContentLayout />,
+          children: [
+            {
               path: "/",
               element: <DashboardPage />,
             },
@@ -59,11 +68,7 @@ const router = createBrowserRouter(
               path: "/cast/:castId",
               element: <CastPage />,
             },
-            {
-              path: "/profile",
-              element: <ProfilePage />,
-            },
-          ],
+          ]
         },
       ],
     },

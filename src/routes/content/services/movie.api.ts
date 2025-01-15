@@ -82,13 +82,6 @@ const movieApi = createApi({
             },
         }),
 
-        getMovieReviews: builder.query<Review[], { movieId: string }>({
-            query: ({ movieId }) => ({
-                url: `movies/reviews/${movieId}`,
-                method: 'GET',
-            }),
-        }),
-
         getSimilarMovies: builder.query<MovieDetailResponse[], { movieId: string }>({
             query: ({ movieId }) => ({
                 url: `llm/similar/${movieId}`,
@@ -174,7 +167,6 @@ export const {
     useSearchMoviesQuery,
     useGetPopularMoviesQuery,
     useGetUpcomingMoviesQuery,
-    useGetMovieReviewsQuery,
     useGetSimilarMoviesQuery,
     useGetMovieCastQuery,
     useGetCastDetailQuery,
