@@ -31,8 +31,11 @@ const Dashboard = () => {
 	}, []);
 
 	async function resendVerifyEmail() {
-		await axios.get(backendURL + '/auth/verify');
-
+		await axios.get(backendURL + '/auth/verify', {
+			headers: {
+				Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
+			}
+		});
 	}
 
 	return (
