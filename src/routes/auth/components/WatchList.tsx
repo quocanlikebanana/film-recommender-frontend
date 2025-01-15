@@ -6,9 +6,14 @@ import MovieCard, {
   MovieCardProps,
 } from "../../content/dashboard/components/MovieCard";
 import { useGetUserWatchListQuery } from "../../content/services/user.api";
+import { useEffect } from "react";
 
 export default function WatchList() {
-  const { data, isLoading, error } = useGetUserWatchListQuery();
+  const { data, isLoading, error, refetch } = useGetUserWatchListQuery();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (error) {
     return <LocalError message="Error loading watch list!" />;

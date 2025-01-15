@@ -100,4 +100,5 @@ export const {
     useGetUserWatchListQuery,
     useGetUserRatingQueryQuery,
     useLazyGetTrackingQuery,
+    useGetTrackingQuery,
 } = userApi;

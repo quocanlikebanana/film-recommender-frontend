@@ -16,18 +16,18 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ onFilterChange, onApplyFilters }) => {
   return (
     <form className="flex flex-wrap">
-      <Grid container spacing={2} className="w-full">
-        <Grid item xs={12} sm={3}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={3}>
           <LangInput onFilterChange={onFilterChange} />
         </Grid>
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <CountryInput onFilterChange={onFilterChange} />
         </Grid>
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <ReleaseYearInput onFilterChange={onFilterChange} />
         </Grid>
-        <Grid item xs={12} sm={3} className="flex items-center">
-          <Button variant="contained" onClick={onApplyFilters}>
+        <Grid item xs={12} sm={6} md={3} className="flex items-center">
+          <Button variant="contained" fullWidth onClick={onApplyFilters}>
             Apply
           </Button>
         </Grid>

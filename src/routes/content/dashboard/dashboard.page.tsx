@@ -2,7 +2,7 @@ import TrendingMovies from "./components/TrendingMovies";
 import HeroSection from "./components/HeroSection";
 import axios from "axios";
 import React from "react";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import LocalStorageService from "../../../services/localstorage.service";
 
 import PopularMovies from "./components/PopularMovies";
@@ -12,15 +12,22 @@ import { backendURL } from "../../../app/env";
 
 const Dashboard = () => {
   const [isVerify, setIsVerify] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   async function isVerified() {
-    const res = await axios.get(backendURL + "/auth/isVerify", {
-      headers: {
-        Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
-      },
-    });
-    if (res.status === 200) {
-      setIsVerify(true);
+    try {
+      const res = await axios.get(backendURL + "/auth/isVerify", {
+        headers: {
+          Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
+        },
+      });
+      if (res.status === 200) {
+        setIsVerify(true);
+      }
+    } catch (error) {
+      console.error("Error verifying user:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -34,6 +41,14 @@ const Dashboard = () => {
         Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
       },
     });
+  }
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "100px" }}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
