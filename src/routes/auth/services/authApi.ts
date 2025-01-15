@@ -28,7 +28,7 @@ interface AuthResponse {
 }
 
 const authApiReducerPath = 'authApi';
-const backendFetchQuery = fetchBaseQuery({ baseUrl: backendURL + '/api/' });
+const backendFetchQuery = fetchBaseQuery({ baseUrl: backendURL });
 
 // Define a service using a base URL and expected endpoints
 const authApi = createApi({

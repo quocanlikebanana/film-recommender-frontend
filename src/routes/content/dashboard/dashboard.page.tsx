@@ -16,7 +16,7 @@ const Dashboard = () => {
 
 	async function isVerified() {
 		console.log('FE token', LocalStorageService.getAccessToken());
-		const res = await axios.get(backendURL + '/api/auth/isVerify', {
+		const res = await axios.get(backendURL + 'auth/isVerify', {
 			headers: {
 				Authorization: `Bearer ${LocalStorageService.getAccessToken()}`,
 			}
@@ -31,7 +31,7 @@ const Dashboard = () => {
 	}, []);
 
 	async function resendVerifyEmail() {
-		await axios.get(backendURL + '/api/auth/verify');
+		await axios.get(backendURL + 'auth/verify');
 
 	}
 
