@@ -64,7 +64,7 @@ const LoginPage: React.FC = () => {
 	async function handleReset(): Promise<void> {
 		try {
 			const email = (document.getElementById('resetEmail') as HTMLInputElement).value;
-			const response = await axios.post(backendURL + 'auth/resetPassword', {
+			const response = await axios.post(backendURL + '/auth/resetPassword', {
 				email: email
 			});
 			setDialogText('An email has been sent to your email address. Please check your email to reset your password');
