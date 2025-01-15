@@ -1,4 +1,5 @@
 import { MovieDetailResponse, Review, UserTracking } from "../interfaces/movie.interface";
+import { UserProfileInfo } from "../interfaces/user.type";
 import protectedApi from "./protectedApi";
 
 const userApi = protectedApi.injectEndpoints({
@@ -83,12 +84,18 @@ const userApi = protectedApi.injectEndpoints({
             })
         }),
 
-
         getTracking: builder.query<UserTracking, { movieId: string | number }>({
             query: ({ movieId }) => ({
                 url: `users/movie/${movieId}`,
                 method: 'GET',
             })
+        }),
+
+        getUserProfile: builder.query<UserProfileInfo, void>({
+            query: () => ({
+                url: 'users/self',
+                method: 'GET',
+            }),
         }),
     }),
     overrideExisting: true,
@@ -109,4 +116,5 @@ export const {
     useLazyGetTrackingQuery,
     useGetTrackingQuery,
     useGetMovieReviewsQuery,
+    useGetUserProfileQuery,
 } = userApi;
