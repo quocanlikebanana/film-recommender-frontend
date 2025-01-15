@@ -69,7 +69,7 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
           md: 250,
           lg: 350,
         },
-        height: "auto",
+        minWidth: 250,
         display: "flex",
         justifyContent: "space-between",
         flexDirection: "column",
@@ -85,7 +85,6 @@ export default function MovieCard({ movie }: { movie: MovieCardProps | null }) {
         image={movie.poster}
         alt={movie.title}
         sx={{
-          height: "100%",
           width: "100%",
         }}
       />

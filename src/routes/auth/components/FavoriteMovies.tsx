@@ -6,9 +6,14 @@ import MovieCard, {
   MovieCardProps,
 } from "../../content/dashboard/components/MovieCard";
 import { useGetUserFavoriteQuery } from "../../content/services/user.api";
+import { useEffect } from "react";
 
 export default function FavoriteMovies() {
-  const { data, isLoading, error } = useGetUserFavoriteQuery();
+  const { data, isLoading, error, refetch } = useGetUserFavoriteQuery();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (error) {
     return <LocalError message="Error loading favorite movies!" />;

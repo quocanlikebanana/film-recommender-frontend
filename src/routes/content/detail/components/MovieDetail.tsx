@@ -41,16 +41,18 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
   const [ratingMovie, ratingMovieRsp] = useLazyRatingQuery();
   const [currentRating, setCurrentRating] = React.useState<number | null>(null);
 
-  const [getUserTracking, trackingRsp] = useLazyGetTrackingQuery();
+  const [getUserTracking] = useLazyGetTrackingQuery();
 
   useEffect(() => {
     if (user) {
-      getUserTracking({ movieId: movieId });
-      if (trackingRsp.data != undefined && trackingRsp.data.score_rated != -1) {
-        setCurrentRating(trackingRsp.data.score_rated);
-      }
+      setCurrentRating(null);
+      getUserTracking({ movieId: movieId }).then((response) => {
+        if (response.data && response.data.score_rated !== -1) {
+          setCurrentRating(response.data.score_rated);
+        }
+      });
     }
-  }, []);
+  }, [user, movieId, getUserTracking]);
 
   const [customErr, setError] = React.useState<string | null>(null);
   const [successMss, setSuccessMss] = React.useState<string | null>(null);
@@ -63,9 +65,8 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
       navigate("/login");
     }
     if (newValue !== null) {
-      console.log("Rating: ", newValue);
       setCurrentRating(newValue);
-      ratingMovie({ movieId: movieId, rating: currentRating || 0 });
+      ratingMovie({ movieId: movieId, rating: newValue });
       if (ratingMovieRsp.error) {
         handleErr("Error rating movie");
       } else {

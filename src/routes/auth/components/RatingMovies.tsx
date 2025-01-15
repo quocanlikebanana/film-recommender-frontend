@@ -6,9 +6,14 @@ import MovieCard, {
   MovieCardProps,
 } from "../../content/dashboard/components/MovieCard";
 import { useGetUserRatingQueryQuery } from "../../content/services/user.api";
+import { useEffect } from "react";
 
 export default function RatingMovies() {
-  const { data, isLoading, error } = useGetUserRatingQueryQuery();
+  const { data, isLoading, error, refetch } = useGetUserRatingQueryQuery();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (error) {
     return <LocalError message="Error loading rating list!" />;
