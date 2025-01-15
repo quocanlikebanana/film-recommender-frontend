@@ -5,7 +5,7 @@ import LocalStorageService from '../services/localstorage.service.ts';
 import logoutApi from '../routes/content/services/logout.api.ts';
 import deleteAccApi from '../routes/content/services/deleteAcc.api.ts';
 
-type UserSessionInfo = {
+export type UserSessionInfo = {
 	email: string;
 	firstName: string;
 	lastName: string;
@@ -20,9 +20,10 @@ interface AuthState {
 const initialState: AuthState = ((): AuthState => {
 	const accessToken = LocalStorageService.getAccessToken();
 	const refreshToken = LocalStorageService.getRefreshToken();
+	const user = LocalStorageService.getUser();
 	if (accessToken && refreshToken) {
 		return {
-			user: null,
+			user: user,
 			token: {
 				accessToken,
 				refreshToken,
@@ -42,9 +43,8 @@ function setApiAuthState(state: AuthState, action: PayloadAction<AuthResponse>) 
 		lastName: action.payload.lastName,
 		avatarPath: action.payload.avatarPath,
 	};
-	//xtodo: set BE response
 	state.token = action.payload.token;
-	LocalStorageService.setTokens(action.payload.token);
+	LocalStorageService.setAll(state.token, state.user);
 	console.log(action.payload.token);
 }
 

@@ -8,7 +8,7 @@ import LocalStorageService from '../services/localstorage.service';
 const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
 	const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
 	if (noAuth) {
-		LocalStorageService.setTokens({ accessToken: tmdbConfig.accessToken, refreshToken: "" });
+		LocalStorageService.setAll({ accessToken: tmdbConfig.accessToken, refreshToken: "" }, { email: "", firstName: "", lastName: "", avatarPath: "" });
 	}
 	const element = (isAuthenticated || noAuth) ? children : <Navigate to="/login" />;
 	return element;
