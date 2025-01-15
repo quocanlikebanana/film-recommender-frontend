@@ -4,7 +4,6 @@ import authApi, { AuthResponse, Token } from '../routes/auth/services/authApi.ts
 import LocalStorageService from '../services/localstorage.service.ts';
 import logoutApi from '../routes/content/services/logout.api.ts';
 import deleteAccApi from '../routes/content/services/deleteAcc.api.ts';
-import { CleaningServices } from '@mui/icons-material';
 
 type UserSessionInfo = {
 	email: string;
