@@ -20,10 +20,9 @@ interface AuthState {
 const initialState: AuthState = ((): AuthState => {
 	const accessToken = LocalStorageService.getAccessToken();
 	const refreshToken = LocalStorageService.getRefreshToken();
-	const user = LocalStorageService.getUser();
 	if (accessToken && refreshToken) {
 		return {
-			user: user,
+			user: null,
 			token: {
 				accessToken,
 				refreshToken,
@@ -44,18 +43,18 @@ function setApiAuthState(state: AuthState, action: PayloadAction<AuthResponse>) 
 		avatarPath: action.payload.avatarPath,
 	};
 	state.token = action.payload.token;
-	LocalStorageService.setAll(state.token, state.user);
-	console.log(action.payload.token);
+	LocalStorageService.setTokens(state.token);
 }
 
 const authSlice = createSlice({
 	name: 'auth',
 	initialState,
 	reducers: {
-		// setToken(state, action: PayloadAction<Token>) {
-		// 	state.token = action.payload;
-		// 	LocalStorageService.setTokens(action.payload);
-		// }
+		clearAuthState(state: AuthState) {
+			state.user = null;
+			state.token = null;
+			LocalStorageService.clearTokens();
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -101,6 +100,8 @@ const authSlice = createSlice({
 });
 
 export const selectAuthUser = (state: RootState) => state.auth.user;
-export const selectIsAuth = (state: RootState) => state.auth.token != null && state.auth.user != null;
+export const selectIsAuth = (state: RootState) => state.auth.token != null;
+
+export const { clearAuthState } = authSlice.actions;
 
 export default authSlice.reducer;

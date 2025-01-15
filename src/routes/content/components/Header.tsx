@@ -18,8 +18,8 @@ import { useLogoutMutation } from "../services/logout.api";
 import { useContentContext } from "../context/Content.hook";
 import { useNavigate } from "react-router-dom";
 import { useDeleteAccMutation } from "../services/deleteAcc.api";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAuthState, selectIsAuth } from "../../../stores/authSlice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,6 +61,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const drawerWidth = 240;
 
 const Header: React.FC = () => {
+  const dispatch = useDispatch();
+
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [searchString, setSearchString] = useState("");
@@ -69,7 +71,7 @@ const Header: React.FC = () => {
   const { handleOpenBackdrop, handleCloseBackdrop } = useContentContext();
   const navigate = useNavigate();
 
-  const isAuthenticated = useSelector((state: RootState) => state.auth.user !== null);
+  const isAuthenticated = useSelector(selectIsAuth);
 
   const redirectToProfile = () => {
     navigate("/profile");
@@ -88,6 +90,7 @@ const Header: React.FC = () => {
   };
 
   const handleLogin = () => {
+    dispatch(clearAuthState());
     navigate("/login");
   }
 

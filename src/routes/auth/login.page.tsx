@@ -173,7 +173,6 @@ const LoginPage: React.FC = () => {
 							</DialogContent>
 						</Dialog>
 
-
 						{/* Submit Button */}
 						<Button
 							type='submit'

@@ -8,6 +8,14 @@ import {
 } from "@mui/material";
 import { Trailer } from "../../interfaces/movie.interface";
 
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 export default function TrailerCard({ trailer }: { trailer: Trailer | null }) {
   const getYouTubeThumbnail = (videoKey: string) =>
     `https://img.youtube.com/vi/${videoKey}/hqdefault.jpg`;
@@ -110,7 +118,7 @@ export default function TrailerCard({ trailer }: { trailer: Trailer | null }) {
             WebkitLineClamp: 2,
           }}
         >
-          {trailer.published_at}
+          {formatDate(trailer.published_at)}
         </Typography>
       </CardContent>
     </Card>
