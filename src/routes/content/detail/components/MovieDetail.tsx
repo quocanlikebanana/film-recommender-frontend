@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, Box, Rating, IconButton, Alert } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import {
   useLazyAddFavoriteQuery,
   useLazyAddWatchListQuery,
+  useLazyGetTrackingQuery,
+  useLazyRatingQuery,
 } from "../../services/user.api";
 
 interface MovieDetailsProps {
@@ -36,6 +38,19 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
 
   const [addToWatchList, addToWatchListRsp] = useLazyAddWatchListQuery();
   const [addToFavorite, addToFavoriteRsp] = useLazyAddFavoriteQuery();
+  const [ratingMovie, ratingMovieRsp] = useLazyRatingQuery();
+  const [currentRating, setCurrentRating] = React.useState<number | null>(null);
+
+  const [getUserTracking, trackingRsp] = useLazyGetTrackingQuery();
+
+  useEffect(() => {
+    if (user) {
+      getUserTracking({ movieId: movieId });
+      if (trackingRsp.data != undefined && trackingRsp.data.score_rated != -1) {
+        setCurrentRating(trackingRsp.data.score_rated);
+      }
+    }
+  }, []);
 
   const [customErr, setError] = React.useState<string | null>(null);
   const [successMss, setSuccessMss] = React.useState<string | null>(null);
@@ -47,7 +62,16 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
     if (!user) {
       navigate("/login");
     }
-    console.log("User Rating:", newValue);
+    if (newValue !== null) {
+      console.log("Rating: ", newValue);
+      setCurrentRating(newValue);
+      ratingMovie({ movieId: movieId, rating: currentRating || 0 });
+      if (ratingMovieRsp.error) {
+        handleErr("Error rating movie");
+      } else {
+        handleSuccesss("Rated movie successfully");
+      }
+    }
   };
 
   const handleAddFavorite = () => {
@@ -129,21 +153,21 @@ const MovieDetail: React.FC<MovieDetailsProps> = ({
         {/* Rating component for user input */}
         <Rating
           name="customized-10"
-          value={user ? 0 : 0}
+          value={currentRating}
           onChange={handleRatingChange} // Update the rating when user selects a new value
           max={10}
         />
       </Box>
       <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
         <IconButton
-          onClick={handleAddFavorite}
+          onClick={handleAddToWatchList}
           sx={{ cursor: "pointer" }}
           aria-label="add to watch list"
         >
           <AddCircleOutlineIcon />
         </IconButton>
         <IconButton
-          onClick={handleAddToWatchList}
+          onClick={handleAddFavorite}
           sx={{ cursor: "pointer" }}
           aria-label="add to favorites"
         >

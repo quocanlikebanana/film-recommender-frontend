@@ -14,14 +14,14 @@ const userApi = protectedApi.injectEndpoints({
         }),
 
         addFavorite: builder.query<void, { movieId: string | number }>({
-            query: (movieId) => ({
+            query: ({ movieId }) => ({
                 url: `users/favorite/add/${movieId}`,
                 method: 'POST',
             })
         }),
 
         removeFavorite: builder.query<void, { movieId: string | number }>({
-            query: (movieId) => ({
+            query: ({ movieId }) => ({
                 url: `users/favorite/remove/${movieId}`,
                 method: 'POST',
             })
@@ -99,4 +99,5 @@ export const {
     useGetUserFavoriteQuery,
     useGetUserWatchListQuery,
     useGetUserRatingQueryQuery,
+    useLazyGetTrackingQuery,
 } = userApi;

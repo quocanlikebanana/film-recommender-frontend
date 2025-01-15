@@ -9,12 +9,16 @@ import { toTmdbImageUrl } from "../../app/image";
 const ChatButton: React.FC = () => {
   const [isChatboxOpen, setChatboxOpen] = useState(false);
   const [getLLMMovie, { data, error, isLoading }] = useLazyGetLLMMoviesQuery();
-  const [getLLMNavigate, navigateRsp] = useLazyGetLLMiNavigateQuery();
+  const [
+    getLLMNavigate,
+    { data: navData, error: navError, isLoading: navLoading },
+  ] = useLazyGetLLMiNavigateQuery();
   const [messages, setMessages] = useState<
     { sender: string; message: React.ReactNode }[]
   >([]);
-  const [shouldFetch, setShouldFetch] = useState(false);
+
   const userInputRef = useRef<HTMLInputElement>(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true); // Thêm biến trạng thái này
 
   const toggleChatbox = () => {
     setChatboxOpen(!isChatboxOpen);
@@ -24,8 +28,8 @@ const ChatButton: React.FC = () => {
     if (userInputRef.current) {
       const userMessage = userInputRef.current.value.trim();
       if (userMessage) {
-        setMessages([
-          ...messages,
+        setMessages((prevMessages) => [
+          ...prevMessages,
           { sender: "user", message: <p>{userMessage}</p> },
         ]);
         respondToUser(userMessage);
@@ -38,8 +42,8 @@ const ChatButton: React.FC = () => {
     if (userInputRef.current) {
       const userMessage = userInputRef.current.value.trim();
       if (userMessage) {
-        setMessages([
-          ...messages,
+        setMessages((prevMessages) => [
+          ...prevMessages,
           { sender: "user", message: <p>{userMessage}</p> },
         ]);
         respondToUserNavigate(userMessage);
@@ -49,121 +53,96 @@ const ChatButton: React.FC = () => {
   };
 
   const respondToUser = (userMessage: string) => {
-    setShouldFetch(true); // Bật cờ khi người dùng gửi tin nhắn
     getLLMMovie({ query: userMessage, page: 1, limit: 10 });
   };
 
   const respondToUserNavigate = (userMessage: string) => {
-    setShouldFetch(true); // Bật cờ khi người dùng gửi tin nhắn
     getLLMNavigate({ query: userMessage });
   };
 
   useEffect(() => {
-    if (shouldFetch) {
-      // Chỉ gọi API khi cờ được bật
-      if (isLoading) {
-        setMessages((prevMessages) => {
-          const loadingMessageExists = prevMessages.some(
-            (msg) => msg.message === "Đang tải dữ liệu...",
-          );
-          if (!loadingMessageExists) {
-            return [
-              ...prevMessages,
-              { sender: "bot", message: "Đang tải dữ liệu..." },
-            ];
-          }
-          return prevMessages;
-        });
-      } else {
-        setMessages((prevMessages) =>
-          prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
-        );
+    if (isInitialLoad || !isChatboxOpen) {
+      setIsInitialLoad(false); // Đặt lại `isInitialLoad` để chỉ chạy khi lần đầu tải trang
+      return; // Thoát khỏi `useEffect` nếu là lần tải đầu tiên
+    }
 
-        if (error) {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
-          ]);
-        } else if (data?.results.length !== 0) {
-          const aiMss = data?.results.map((movie) => ({
-            sender: "bot",
-            message: (
-              <MovieCard
-                movie={{
-                  id: movie.id.toString(),
-                  poster: toTmdbImageUrl(movie.poster_path),
-                  title: movie.title,
-                  rating: movie.vote_average,
-                  description: movie.overview || "",
-                }}
-              />
-            ),
-          }));
-          if (aiMss == undefined || aiMss.length == 0) {
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
-            ]);
-          } else {
-            setMessages((prevMessages) => [...prevMessages, ...aiMss]);
-          }
-        }
-        setShouldFetch(false); // Tắt cờ sau khi xử lý xong
+    if (isLoading) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", message: "Đang tải dữ liệu..." },
+      ]);
+    } else {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
+      );
+
+      if (error) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
+        ]);
+      } else if (data?.results.length !== 0) {
+        const aiMss = data?.results.map((movie) => ({
+          sender: "bot",
+          message: (
+            <MovieCard
+              movie={{
+                id: movie.id.toString(),
+                poster: toTmdbImageUrl(movie.poster_path),
+                title: movie.title,
+                rating: movie.vote_average,
+                description: movie.overview || "",
+              }}
+            />
+          ),
+        }));
+        setMessages((prevMessages) => [...prevMessages, ...(aiMss || [])]);
+      } else {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
+        ]);
       }
     }
-  }, [data, error, isLoading, shouldFetch]);
+  }, [data, error, isLoading, isInitialLoad]); // Thêm `isInitialLoad` vào dependency
 
   useEffect(() => {
-    if (shouldFetch) {
-      // Chỉ gọi API khi cờ được bật
-      if (isLoading) {
-        setMessages((prevMessages) => {
-          const loadingMessageExists = prevMessages.some(
-            (msg) => msg.message === "Đang tải dữ liệu...",
-          );
-          if (!loadingMessageExists) {
-            return [
-              ...prevMessages,
-              { sender: "bot", message: "Đang tải dữ liệu..." },
-            ];
-          }
-          return prevMessages;
-        });
-      } else {
-        setMessages((prevMessages) =>
-          prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
-        );
+    if (isInitialLoad || !isChatboxOpen) {
+      setIsInitialLoad(false);
+      return;
+    }
 
-        if (error) {
-          setMessages((prevMessages) => [
-            ...prevMessages,
-            { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
-          ]);
-        } else {
-          console.log(navigateRsp.data);
-          if (
-            navigateRsp.data == undefined ||
-            navigateRsp.data == null ||
-            navigateRsp.data == ""
-          ) {
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
-            ]);
-          } else {
-            setMessages((prevMessages) => [
-              ...prevMessages,
-              { sender: "bot", message: navigateRsp.data },
-            ]);
-          }
-        }
-        setShouldFetch(false); // Tắt cờ sau khi xử lý xong
+    if (navLoading) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", message: "Đang tải dữ liệu..." },
+      ]);
+    } else {
+      setMessages((prevMessages) =>
+        prevMessages.filter((msg) => msg.message !== "Đang tải dữ liệu..."),
+      );
+
+      if (navError) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", message: "Đã xảy ra lỗi. Vui lòng thử lại sau." },
+        ]);
+      } else if (navData?.path) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", message: <a href={navData.path}>{navData.path}</a> },
+        ]);
+      } else {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { sender: "bot", message: "Không tìm thấy kết quả phù hợp." },
+        ]);
       }
     }
-  }, [navigateRsp, shouldFetch]);
+  }, [navData, navError, navLoading, isInitialLoad]); // Thêm `isInitialLoad` vào dependency
 
   return (
-    <div className="z-50 ">
+    <div className="z-50">
       <div className="fixed bottom-0 right-0 mb-4 mr-4">
         <button
           onClick={toggleChatbox}

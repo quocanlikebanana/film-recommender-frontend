@@ -16,6 +16,10 @@ interface ProductionCountry {
     name: string;
 }
 
+export interface Navigate {
+    path: string;
+}
+
 export interface UserTracking {
     is_favorite: boolean;
     is_watchlist: boolean;

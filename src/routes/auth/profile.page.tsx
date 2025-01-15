@@ -2,14 +2,17 @@ import { Container, Paper, Typography, Avatar, Grid, Box } from "@mui/material";
 import FavoriteMovies from "./components/FavoriteMovies";
 import WatchList from "./components/WatchList";
 import RatingMovies from "./components/RatingMovies";
+import { useAppSelector } from "../../app/hooks";
+import { selectAuthUser } from "../../stores/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
-  const user = {
-    email: "ConCacDuMaMay@gmail.com",
-    firstName: "CoN",
-    lastName: "CaC",
-  };
+  const user = useAppSelector(selectAuthUser);
+  const navigate = useNavigate();
 
+  if (!user) {
+    navigate("/login");
+  }
   return (
     <Container>
       <Paper elevation={3} sx={{ p: 4 }} className="m-5">
@@ -23,17 +26,17 @@ const ProfilePage = () => {
                 fontSize: 40,
               }}
             >
-              {user.firstName.charAt(0)}
-              {user.lastName.charAt(0)}
+              {user?.firstName.charAt(0)}
+              {user?.lastName.charAt(0)}
             </Avatar>
           </Grid>
           <Grid item xs={12} sm={8}>
             <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
               <Typography variant="h5" component="div" gutterBottom>
-                {user.firstName} {user.lastName}
+                {user?.firstName} {user?.lastName}
               </Typography>
               <Typography variant="body1" color="text.secondary" gutterBottom>
-                {user.email}
+                {user?.email}
               </Typography>
             </Box>
           </Grid>

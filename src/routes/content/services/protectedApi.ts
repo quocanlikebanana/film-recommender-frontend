@@ -9,10 +9,11 @@ const protectedBaseQuery = fetchBaseQuery({
 	baseUrl: backendURL,
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth.token;
+
 		if (token == null) {
 			throw new ClientError('Unauthorized');
 		}
-		headers.set('Authorization', `Bearer ${token}`);
+		headers.set('Authorization', `Bearer ${token.accessToken}`);
 		return headers;
 	},
 });

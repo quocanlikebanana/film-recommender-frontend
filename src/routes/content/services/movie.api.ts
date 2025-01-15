@@ -1,6 +1,6 @@
 import { BaseQueryApi, createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { backendURL } from '../../../app/env';
-import { Cast, MovieDetailResponse, Review, Trailer } from '../interfaces/movie.interface'
+import { Cast, MovieDetailResponse, Navigate, Review, Trailer } from '../interfaces/movie.interface'
 import { Paged } from '../interfaces/common.type';
 
 const movieApiReducerPath = 'movieApi';
@@ -157,7 +157,7 @@ const movieApi = createApi({
         }),
 
 
-        getLLMiNavigate: builder.query<string, { query: string }>({
+        getLLMiNavigate: builder.query<Navigate, { query: string }>({
             query: ({ query }) => ({
                 url: `llm/navigate`,
                 method: 'POST',
